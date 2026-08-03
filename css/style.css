@@ -1,0 +1,1129 @@
+/* css/style.css — Core styles for Deforestation Watch Nepal */
+/* ============================================================
+   1. CSS CUSTOM PROPERTIES
+   ============================================================ */
+:root {
+  /* Color palette */
+  --color-primary: #16a34a;
+  --color-primary-dark: #15803d;
+  --color-primary-light: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-warning-dark: #f97316;
+  --color-info: #3b82f6;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8fafc;
+
+  /* Typography scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+
+  /* Spacing scale (0.25rem increments) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-11: 2.75rem;
+  --space-12: 3rem;
+  --space-13: 3.25rem;
+  --space-14: 3.5rem;
+  --space-15: 3.75rem;
+  --space-16: 4rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================================
+   2. BASE RESETS
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--color-neutral-50);
+  color: var(--color-neutral-800);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ============================================================
+   3. LAYOUT
+   ============================================================ */
+.container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 0 1.5rem;
+}
+
+section {
+  padding: 5rem 1.5rem;
+  max-width: 1400px;
+  margin: auto;
+}
+
+/* ============================================================
+   4. LOADING OVERLAY
+   ============================================================ */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-neutral-900);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  color: white;
+}
+
+#loading-overlay.fade-out {
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+/* ============================================================
+   5. LOADING SPINNER
+   ============================================================ */
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   6. NAVBAR
+   ============================================================ */
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  transition: background var(--transition-slow);
+  backdrop-filter: blur(0);
+}
+
+#navbar.navbar--scrolled {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-logo a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: white;
+}
+
+#nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link--active {
+  color: white;
+  background: rgba(22, 163, 74, 0.2);
+}
+
+#hamburger-btn {
+  display: none;
+  color: white;
+  font-size: var(--text-xl);
+  padding: 0.5rem;
+}
+
+/* ============================================================
+   7. CARDS
+   ============================================================ */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-critical {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+/* ============================================================
+   8. STAT CARDS
+   ============================================================ */
+.stat-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-neutral-200);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all var(--transition-fast);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.stat-card__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+}
+
+.stat-card__value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  line-height: 1.2;
+}
+
+.stat-card__label {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+}
+
+.stat-card--green .stat-card__icon {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.stat-card--amber .stat-card__icon {
+  background: #fef3c7;
+  color: #f59e0b;
+}
+
+.stat-card--blue .stat-card__icon {
+  background: #dbeafe;
+  color: #3b82f6;
+}
+
+/* ============================================================
+   9. SKELETON CARD
+   ============================================================ */
+.skeleton-card {
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  height: 8rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ============================================================
+   10. BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-outline {
+  border: 1px solid var(--color-neutral-300);
+  color: var(--color-neutral-700);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   11. BADGES
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.badge-green  { background: #dcfce7; color: #15803d; }
+.badge-amber  { background: #fef3c7; color: #92400e; }
+.badge-orange { background: #ffedd5; color: #c2410c; }
+.badge-red    { background: #fee2e2; color: #b91c1c; }
+
+/* ============================================================
+   12. MAP LEGEND
+   ============================================================ */
+.map-legend {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-xs);
+  min-width: 140px;
+}
+
+.map-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+.map-legend__swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   13. HERO SECTION
+   ============================================================ */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: white;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2e1a 50%, #0f172a 100%);
+  z-index: 0;
+}
+
+#particle-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 2rem;
+}
+
+.hero-title {
+  font-size: var(--text-5xl);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.hero-subtitle {
+  font-size: var(--text-xl);
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+#hero-stats {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.scroll-indicator {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--text-2xl);
+  padding: 0.75rem;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.scroll-indicator:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================================
+   14. YEAR TIMELINE
+   ============================================================ */
+#year-timeline {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.year-btn {
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  border: 1px solid var(--color-neutral-200);
+  transition: all var(--transition-fast);
+}
+
+.year-btn:hover {
+  background: var(--color-neutral-200);
+}
+
+.year-btn--active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* ============================================================
+   15. COMPARISON SLIDER
+   ============================================================ */
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  min-height: 400px;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.slider-before,
+.slider-after {
+  position: absolute;
+  inset: 0;
+}
+
+.slider-before img,
+.slider-after img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: white;
+  cursor: col-resize;
+  transform: translateX(-50%);
+}
+
+.slider-grip {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  color: var(--color-neutral-700);
+}
+
+.slider-label {
+  position: absolute;
+  bottom: 1rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.slider-before .slider-label { left: 1rem; }
+.slider-after  .slider-label { right: 1rem; }
+
+/* ============================================================
+   16. CHARTS GRID
+   ============================================================ */
+#charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.chart-wrapper {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.chart-wrapper h3 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  margin-bottom: 1rem;
+}
+
+/* ============================================================
+   17. STATS GRID
+   ============================================================ */
+#stats-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* ============================================================
+   18. DOWNLOAD CARDS
+   ============================================================ */
+#download-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.download-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-200);
+  transition: all var(--transition-fast);
+}
+
+.download-card[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.download-card__icon {
+  font-size: var(--text-3xl);
+  margin-bottom: 0.75rem;
+}
+
+.download-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   19. METHODOLOGY SECTION
+   ============================================================ */
+#methodology article {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-left: 3px solid var(--color-primary);
+  margin-bottom: 1rem;
+  background: var(--color-surface);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+#methodology article h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-neutral-800);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+#methodology article i {
+  color: var(--color-primary);
+  font-size: var(--text-xl);
+}
+
+/* ============================================================
+   20. TEAM GRID
+   ============================================================ */
+#team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.team-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.team-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+}
+
+/* ============================================================
+   21. CONTACT FORM
+   ============================================================ */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+}
+
+.form-field input,
+.form-field textarea,
+input[type="text"],
+input[type="email"],
+textarea {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.form-field input:focus,
+.form-field textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.field-error {
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+  min-height: 1em;
+}
+
+#contact-submit {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--text-base);
+  transition: background var(--transition-fast);
+}
+
+#contact-submit:hover {
+  background: var(--color-primary-dark);
+}
+
+#contact-success {
+  padding: 1rem;
+  background: #dcfce7;
+  color: #15803d;
+  border-radius: var(--radius-md);
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   22. FOOTER
+   ============================================================ */
+#footer {
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-300);
+  padding: 3rem 1.5rem;
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-brand i {
+  color: var(--color-primary);
+  font-size: var(--text-xl);
+}
+
+.footer-brand span {
+  font-weight: 700;
+  color: white;
+  font-size: var(--text-lg);
+}
+
+.footer-copyright {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+}
+
+#footer nav ul {
+  display: flex;
+  gap: 1.5rem;
+}
+
+#footer nav a {
+  color: var(--color-neutral-400);
+  font-size: var(--text-sm);
+  transition: color var(--transition-fast);
+}
+
+#footer nav a:hover {
+  color: white;
+}
+
+#back-to-top {
+  padding: 0.625rem 1.25rem;
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: background var(--transition-fast);
+}
+
+#back-to-top:hover {
+  background: var(--color-primary-dark);
+}
+
+/* ============================================================
+   23. TOAST NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast {
+  background: var(--color-neutral-800);
+  color: white;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 360px;
+  font-size: var(--text-sm);
+  border-left: 3px solid var(--color-danger);
+}
+
+/* ============================================================
+   24. SECTION HEADINGS
+   ============================================================ */
+section h2 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  margin-bottom: 0.5rem;
+}
+
+section > p {
+  color: var(--color-neutral-500);
+  margin-bottom: 2.5rem;
+}
+
+/* ============================================================
+   25. PREDICTION CARDS
+   ============================================================ */
+#prediction-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.prediction-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.prediction-card__score {
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.card-critical.prediction-card {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+/* ============================================================
+   26. TOP RISK LIST
+   ============================================================ */
+#top-risk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#top-risk-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.risk-bar-container {
+  flex: 1;
+  height: 6px;
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.risk-bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease;
+}
+
+/* ============================================================
+   27. CONFIDENCE BADGE
+   ============================================================ */
+#confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================================
+   28. INSIGHTS GRID
+   ============================================================ */
+#insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.insight-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border-left: 4px solid;
+  box-shadow: var(--shadow-sm);
+}
+
+.insight-card--danger  { border-color: var(--color-danger); }
+.insight-card--success { border-color: var(--color-primary); }
+.insight-card--info    { border-color: var(--color-info); }
+
+.insight-card__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-600);
+  margin-bottom: 0.375rem;
+}
+
+.insight-card__value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+}
+
+.insight-card__desc {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  margin-top: 0.375rem;
+}
+
+/* ============================================================
+   29. ACCESSIBILITY — FOCUS VISIBLE
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   30. YEAR RANGE CONTROLS
+   ============================================================ */
+#year-range-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#year-range-controls label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-600);
+}
+
+#year-range-controls select {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  background: white;
+  cursor: pointer;
+}
+
+/* ============================================================
+   31. MAP FULLSCREEN
+   ============================================================ */
+#map-container.map-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2000 !important;
+  height: 100vh !important;
+  min-height: unset !important;
+  border-radius: 0 !important;
+}
+
+/* ============================================================
+   32. DISTRICT SEARCH CONTROL
+   ============================================================ */
+.district-search-control {
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: visible;
+  position: relative;
+  min-width: 200px;
+}
+
+.district-search-input {
+  width: 200px;
+  padding: 0.45rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-family: inherit;
+  outline: none;
+  background: transparent;
+}
+
+.district-search-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 9999;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.district-search-list li {
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--color-neutral-700);
+}
+
+.district-search-list li:hover {
+  background: var(--color-neutral-100);
+}
+
+/* ============================================================
+   33. MAP POPUP
+   ============================================================ */
+.map-popup table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.map-popup th {
+  text-align: left;
+  padding: 0.2rem 0.5rem 0.2rem 0;
+  color: var(--color-neutral-500);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.map-popup td {
+  padding: 0.2rem 0;
+  font-weight: 600;
+  color: var(--color-neutral-800);
+}
