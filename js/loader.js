@@ -5,7 +5,7 @@
  * Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 20.3
  */
 
-import { EventBus } from './main.js';
+import { EventBus } from './eventbus.js';
 
 /** File paths and their identity labels */
 const FILES = [

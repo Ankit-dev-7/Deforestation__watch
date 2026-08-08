@@ -110,3 +110,15 @@ export function animateCounter(el, target, duration = 2000) {
 
   requestAnimationFrame(step);
 }
+
+/**
+ * Filter an array of district names by a query string (case-insensitive substring match).
+ * Exported so tests/search.test.js can import and test it in isolation.
+ * @param {string[]} names  Array of district name strings
+ * @param {string}   query  Search query
+ * @returns {string[]}      Matching names
+ */
+export function filterDistrictNames(names, query) {
+  const q = query.toLowerCase();
+  return names.filter(n => n.toLowerCase().includes(q));
+}

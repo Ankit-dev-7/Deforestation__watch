@@ -284,14 +284,16 @@ section {
   font-size: var(--text-lg);
 }
 
-.stat-card__value {
+.stat-card__value,
+.stat-value {
   font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--color-neutral-900);
   line-height: 1.2;
 }
 
-.stat-card__label {
+.stat-card__label,
+.stat-label {
   font-size: var(--text-sm);
   color: var(--color-neutral-500);
 }
@@ -414,6 +416,8 @@ section {
   justify-content: center;
   overflow: hidden;
   color: white;
+  padding: 0;
+  max-width: unset;
 }
 
 .hero-bg {
@@ -421,6 +425,23 @@ section {
   inset: 0;
   background: linear-gradient(135deg, #0f172a 0%, #1a2e1a 50%, #0f172a 100%);
   z-index: 0;
+}
+
+/* Satellite background image — fills the hero, object-fit cover */
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Dark semi-transparent overlay over the satellite image */
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
 }
 
 #particle-canvas {
@@ -439,7 +460,8 @@ section {
 }
 
 .hero-title {
-  font-size: var(--text-5xl);
+  font-family: 'Inter', sans-serif;
+  font-size: var(--text-5xl); /* 3rem — ≥3rem on desktop */
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
@@ -451,6 +473,8 @@ section {
   color: rgba(255, 255, 255, 0.8);
   max-width: 600px;
   margin: 0 auto 2.5rem;
+  /* 2-line cap via line-clamp is intentionally NOT enforced
+     so content remains accessible; subtitle is already ≤2 lines */
 }
 
 #hero-stats {
@@ -459,6 +483,44 @@ section {
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 2.5rem;
+}
+
+/* Hero stat placeholder cards */
+.hero-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(8px);
+  min-width: 130px;
+  color: white;
+  transition: background var(--transition-fast);
+}
+
+.hero-stat-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hero-stat-card i {
+  font-size: var(--text-xl);
+  color: var(--color-primary-light);
+}
+
+.hero-stat-value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-stat-label {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .scroll-indicator {
@@ -697,6 +759,69 @@ section {
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto 1rem;
+  display: block;
+}
+
+.team-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.team-member-name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.team-member-role {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.team-member-bio {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-600);
+  line-height: 1.5;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.team-member-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.team-member-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  transition: border-color var(--transition-fast), color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.team-member-links a:hover,
+.team-member-links a:focus-visible {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: rgba(22, 163, 74, 0.06);
+  outline: none;
+}
+
+.team-member-links a:focus-visible {
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
 }
 
 /* ============================================================
@@ -1126,4 +1251,19 @@ section > p {
   padding: 0.2rem 0;
   font-weight: 600;
   color: var(--color-neutral-800);
+}
+
+/* ============================================================
+   34. ACCESSIBILITY — VISUALLY HIDDEN / SCREEN-READER ONLY
+   ============================================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

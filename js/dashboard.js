@@ -9,7 +9,7 @@
  *  - Default to the most recent year on init
  */
 
-import { EventBus } from './main.js';
+import { EventBus } from './eventbus.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Module-level state

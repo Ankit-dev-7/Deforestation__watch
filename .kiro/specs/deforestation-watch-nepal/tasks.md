@@ -85,7 +85,7 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Export `animateCounter(el, target, duration)`: uses `requestAnimationFrame`; respects `prefers-reduced-motion` (immediately sets `el.textContent` if matched); writes formatted integers on each frame
     - _Requirements: 8.4, 9.2, 9.7, 21.7_
 
-  - [ ]* 4.2 Write property tests for `utils.js` — `tests/utils.test.js`
+  - [x]* 4.2 Write property tests for `utils.js` — `tests/utils.test.js`
     - **Property 1: Risk Level Derivation is Total and Correct** — `fc.integer({ min: 0, max: 100 })` → assert `getRiskLevel` returns exactly the correct label per band; tagged `// Feature: deforestation-watch-nepal, Property 1`
     - **Property 2: Risk Color Coverage** — `fc.integer({ min: 0, max: 100 })` → assert `getRiskColor` returns a string starting with `#` and length ≥ 4; tagged `// Feature: deforestation-watch-nepal, Property 2`
     - **Property 3: Clamp Invariant** — `fc.float(), fc.float(), fc.float()` → normalize min/max, assert `clamp(v, min, max)` result is within `[min, max]`; tagged `// Feature: deforestation-watch-nepal, Property 3`
@@ -104,7 +104,7 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Return the full `LoadResult` object; function MUST resolve (never reject) even if all 5 files fail
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 20.3_
 
-  - [ ]* 5.2 Write property tests for `loader.js` — `tests/loader.test.js`
+  - [x]* 5.2 Write property tests for `loader.js` — `tests/loader.test.js`
     - **Property 4: Loader Round-Trip** — mock `fetch` to return generated valid `statistics.json` payloads; call `loadAll()`; assert `stats` deep-equals the mock payload and `JSON.parse(JSON.stringify(stats.yearlyData))` is structurally equivalent; tagged `// Feature: deforestation-watch-nepal, Property 4`
     - **Property 5: Loader Resilience** — generate subsets of file indices (1–4 failures) to simulate `fetch` rejection; assert `loadAll()` always resolves; assert `errors[].length` equals the number of failed files; assert `data:loaded` event is emitted; tagged `// Feature: deforestation-watch-nepal, Property 5`
     - Configure each `fc.assert` with `{ numRuns: 100 }`
@@ -185,7 +185,7 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Subscribe to `EventBus.on('year:changed', ({ year }) => highlightYearOnChart(year))`
     - _Requirements: 9.4, 9.6_
 
-  - [ ]* 9.3 Write property tests for prediction cards — `tests/prediction.test.js`
+  - [x]* 9.3 Write property tests for prediction cards — `tests/prediction.test.js`
     - **Property 7: Prediction Card Critical Badge Invariant** — `fc.record({ name: fc.string(), riskScore: fc.integer({ min: 0, max: 100 }) })` → call `renderPredictionCard(district)`; assert `.card-critical` present iff `riskScore >= 80`; tagged `// Feature: deforestation-watch-nepal, Property 7`
     - Configure `fc.assert` with `{ numRuns: 100 }`
     - **Validates: Requirements 9.7**
@@ -202,7 +202,7 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Export helper `filterByYearRange(yearlyData, start, end)` returning entries where `entry.year >= start && entry.year <= end` for testability
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
 
-  - [ ]* 10.2 Write property tests for year filter and default year — `tests/yearFilter.test.js`
+  - [x]* 10.2 Write property tests for year filter and default year — `tests/yearFilter.test.js`
     - **Property 8: Year Filter Produces Bounded Results** — `fc.array(fc.record({ year: fc.integer({ min: 2015, max: 2026 }), forestCoverHa: fc.float({ min: 0 }) }))` + two year integers → normalize `[start, end]`; assert all results have `entry.year >= start && entry.year <= end`; tagged `// Feature: deforestation-watch-nepal, Property 8`
     - **Property 9: Time Explorer Defaults to Most Recent Year** — `fc.array(fc.record({ year: fc.integer({ min: 2015, max: 2026 }) }), { minLength: 1 })` → assert `getDefaultYear(data)` equals `Math.max(...data.map(d => d.year))`; tagged `// Feature: deforestation-watch-nepal, Property 9`
     - Configure each `fc.assert` with `{ numRuns: 100 }`
@@ -239,7 +239,7 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Section Reveal: `IntersectionObserver` (threshold 0.1) on all `<section>` elements; on intersection add `.revealed`; disconnect entry after first trigger; skip entirely when `window.matchMedia('(prefers-reduced-motion: reduce)').matches`
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 17.1, 17.2, 17.3, 17.4, 17.5, 18.1, 18.6, 20.1_
 
-  - [ ]* 11.5 Write property and unit tests for UI — `tests/ui.test.js`
+  - [-]* 11.5 Write property and unit tests for UI — `tests/ui.test.js`
     - **Property 6: Stats Cards Match Data** — generate valid `statistics.json` objects; call `ui.init(stats)`; assert all 7 rendered card numeric values equal corresponding fields; tagged `// Feature: deforestation-watch-nepal, Property 6`
     - **Property 11: Form Rejects Invalid** — generate form field combinations where ≥1 required field is empty or email invalid; simulate form submit; assert form fields NOT cleared, success message NOT shown, `.field-error` present for each invalid field; tagged `// Feature: deforestation-watch-nepal, Property 11`
     - **Property 12: Insights Identify Extremes** — generate `districtGeo` FeatureCollections (minLength 1); call `renderInsights()`; assert highest loss card names the district with max `forestLossHa` and highest gain card names the district with max `forestGainHa`; tagged `// Feature: deforestation-watch-nepal, Property 12`
@@ -251,8 +251,8 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
 - [x] 12. Checkpoint — Core modules wired together
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 13. HTML sections — Hero, Statistics, Map, Time Explorer, Analytics
-  - [ ] 13.1 Implement Hero Section HTML in `index.html`
+- [x] 13. HTML sections — Hero, Statistics, Map, Time Explorer, Analytics
+  - [x] 13.1 Implement Hero Section HTML in `index.html`
     - Add `<canvas id="particle-canvas" aria-hidden="true">` absolute-positioned above background, below text
     - Add hero background `<div>` with satellite image (`assets/images/hero-bg.jpg`, `loading="lazy"`) and dark semi-transparent overlay
     - Add `.hero-title` "Deforestation Watch Nepal" Inter font ≥3rem on desktop; add subtitle ≤2 lines
@@ -261,21 +261,21 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Add `<section id="statistics">` with `<div id="stats-cards-grid">` (skeleton then real cards via `ui.js`)
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 4.1–4.5_
 
-  - [~] 13.2 Implement Map, Time Explorer, and Analytics sections HTML in `index.html`
+  - [x] 13.2 Implement Map, Time Explorer, and Analytics sections HTML in `index.html`
     - Add `<section id="map">` with `<div id="map-container" style="min-height:600px">` (Leaflet init target)
     - Add `<section id="time-explorer">` with `<div id="year-timeline" role="group" aria-label="Year selection timeline">`
     - Add year-range filter controls `<input id="year-range-start">` and `<input id="year-range-end">` above charts
     - Add `<section id="analytics">` with `<div id="charts-grid">` containing 6 `.chart-wrapper > <canvas>` elements with IDs `chart-trend`, `chart-loss`, `chart-province`, `chart-district`, `chart-gain`, `chart-composition`; each `<canvas>` has descriptive `aria-label`; each has adjacent visually-hidden `<table>` for accessibility
     - _Requirements: 5.1, 5.13, 6.1–6.11, 7.1, 7.3, 19.1, 19.7_
 
-- [ ] 14. HTML sections — Comparison, Prediction, Insights, Download, Methodology, Team, Contact, Footer
-  - [~] 14.1 Implement Comparison, Prediction, and Insights sections HTML in `index.html`
+- [x] 14. HTML sections — Comparison, Prediction, Insights, Download, Methodology, Team, Contact, Footer
+  - [x] 14.1 Implement Comparison, Prediction, and Insights sections HTML in `index.html`
     - Add `<section id="comparison">` with `#comparison-slider` structure (before/after images + handle); images use `loading="lazy"`
     - Add `<section id="prediction">` with `#confidence-badge`, `#prediction-cards-container`, `<ol id="top-risk-list">`, and two chart canvases (`#chart-historical-predicted`, `#chart-future-cover`)
     - Add `<section id="insights">` with `<div id="insights-grid">`
     - _Requirements: 8.1–8.6, 9.1–9.8, 10.1–10.4_
 
-  - [~] 14.2 Implement Download Center, Methodology, Team, Contact, and Footer HTML in `index.html`
+  - [x] 14.2 Implement Download Center, Methodology, Team, Contact, and Footer HTML in `index.html`
     - Add `<section id="download">` with `<div id="download-cards">` (cards populated by `ui.js`)
     - Add `<section id="methodology">` with 8 static subsections (icons + headings + paragraphs): Satellite Imagery Acquisition, Python Analysis Pipeline, QGIS Workflow, GeoJSON Generation, Data Cleaning, Trend Analysis, Prediction Model Architecture, Known Limitations — readable without JS
     - Add `<section id="team">` with `<div id="team-grid">` containing team member cards with `<img loading="lazy">` (fallback `onerror` placeholder), name, role, GitHub/LinkedIn `<a rel="noopener noreferrer" target="_blank">`
@@ -298,8 +298,8 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - On all fields valid: call `form.reset()`; show `#contact-success` element
     - _Requirements: 14.2, 14.3, 14.5_
 
-- [ ] 16. District search property test — `tests/search.test.js`
-  - [ ]* 16.1 Write property test for district search filter — `tests/search.test.js`
+- [x] 16. District search property test — `tests/search.test.js`
+  - [x]* 16.1 Write property test for district search filter — `tests/search.test.js`
     - Export `filterDistrictNames(names, query)` from `map.js` or `utils.js` for isolated testing
     - **Property 10: District Search Filter is Inclusive and Case-Insensitive** — `fc.array(fc.string({ minLength: 1, maxLength: 30 }), { minLength: 1, maxLength: 77 })` + `fc.string({ minLength: 1, maxLength: 10 })` → assert results length equals `names.filter(n => n.toLowerCase().includes(q.toLowerCase())).length` and every result is in expected set; tagged `// Feature: deforestation-watch-nepal, Property 10`
     - Configure `fc.assert` with `{ numRuns: 100 }`
@@ -315,8 +315,8 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Test: `loadAll()` partial failure path — mock 2 of 5 fetches to reject; assert `loadAll()` resolves, `errors.length === 2`, `data:loaded` event emitted, non-failed fields are non-null
     - _Requirements: 2.1–2.6, 7.2, 5.11_
 
-- [ ] 18. README and test framework setup
-  - [~] 18.1 Create `README.md`
+- [x] 18. README and test framework setup
+  - [x] 18.1 Create `README.md`
     - Write project overview: what Deforestation Watch Nepal is, technology stack summary
     - Write setup instructions: "Open `index.html` in any modern browser — no build step required"
     - Document the data files: purpose, schema summary, and location for each of the 5 files
@@ -331,7 +331,7 @@ Build a fully static, single-page GIS intelligence dashboard using HTML5/CSS3/Va
     - Verify `npx vitest --run` executes without errors on the placeholder files
     - _Requirements: (test infrastructure)_
 
-- [~] 19. Final checkpoint — Ensure all tests pass
+- [x] 19. Final checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 

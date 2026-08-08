@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deforestation Watch Nepal</title>
 
-  <!-- CDN: TailwindCSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- CDN: Leaflet CSS 1.9.4 -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -27,12 +24,6 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-
-  <!-- Loading Overlay -->
-  <div id="loading-overlay" role="status" aria-label="Loading dashboard data">
-    <div class="loading-spinner"></div>
-    <p id="loading-text">Loading data...</p>
-  </div>
 
   <!-- Navigation -->
   <header>
@@ -75,22 +66,50 @@
 
     <!-- Hero Section -->
     <section id="hero" aria-labelledby="hero-heading">
-      <canvas id="particle-canvas" aria-hidden="true"></canvas>
-      <div class="hero-bg" aria-hidden="true"></div>
+      <!-- Layer 0: satellite background image + dark overlay -->
+      <div class="hero-bg" aria-hidden="true">
+        <img src="assets/images/hero-bg.jpg"
+             alt=""
+             aria-hidden="true"
+             loading="lazy"
+             class="hero-bg-img">
+        <div class="hero-bg-overlay"></div>
+      </div>
 
+      <!-- Layer 1: particle canvas (above bg, below text) -->
+      <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+      <!-- Layer 2: hero content -->
       <div class="hero-content">
         <h1 id="hero-heading" class="hero-title">Deforestation Watch Nepal</h1>
         <p class="hero-subtitle">
           Real-time GIS intelligence platform monitoring Nepal's forest cover dynamics,
-          deforestation risk, and AI-driven conservation insights from 2015 to 2026.
+          deforestation risk, data from 2015 to 2026.
         </p>
 
-        <!-- Hero stat cards (populated by ui.js) -->
-        <div id="hero-stats" aria-label="Key forest statistics"></div>
+        <!-- Hero stat placeholder cards (Forest Cover, Forest Loss, Forest Gain).
+             ui.init() replaces these with live data from statistics.json. -->
+        <div id="hero-stats" aria-label="Key forest statistics">
+          <div class="hero-stat-card" data-hero-stat="forestCoverHa" aria-label="Total Forest Cover">
+            <i class="fa-solid fa-tree" aria-hidden="true"></i>
+            <span class="hero-stat-value">—</span>
+            <span class="hero-stat-label">Forest Cover</span>
+          </div>
+          <div class="hero-stat-card" data-hero-stat="forestLossHa" aria-label="Annual Forest Loss">
+            <i class="fa-solid fa-circle-minus" aria-hidden="true"></i>
+            <span class="hero-stat-value">—</span>
+            <span class="hero-stat-label">Forest Loss</span>
+          </div>
+          <div class="hero-stat-card" data-hero-stat="forestGainHa" aria-label="Annual Forest Gain">
+            <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+            <span class="hero-stat-value">—</span>
+            <span class="hero-stat-label">Forest Gain</span>
+          </div>
+        </div>
 
-        <!-- Scroll indicator -->
+        <!-- Scroll indicator: bounces via CSS; smooth-scrolls to #statistics -->
         <button class="scroll-indicator"
-                aria-label="Scroll down to statistics"
+                aria-label="Scroll to statistics"
                 onclick="document.getElementById('statistics').scrollIntoView({behavior:'smooth'})">
           <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
         </button>
@@ -100,6 +119,7 @@
     <!-- Statistics Cards Section -->
     <section id="statistics" aria-labelledby="stats-heading">
       <h2 id="stats-heading">Forest Statistics</h2>
+      <p>Nationwide forest metrics for Nepal, updated annually from satellite imagery analysis.</p>
       <div id="stats-cards-grid" aria-label="Forest statistics cards"></div>
     </section>
 
@@ -123,45 +143,91 @@
     <section id="analytics" aria-labelledby="analytics-heading">
       <h2 id="analytics-heading">Analytics Dashboard</h2>
 
-      <!-- Year-range filter controls -->
+      <!-- Year-range filter controls (above charts grid) -->
+      <!-- charts.js populates these <select> elements with <option> nodes via populateYearRangeSelects() -->
       <div id="year-range-controls" aria-label="Chart year range filter">
-        <label for="year-range-start">From</label>
-        <select id="year-range-start" aria-label="Start year"></select>
-        <label for="year-range-end">To</label>
-        <select id="year-range-end" aria-label="End year"></select>
+        <label for="year-range-start">From year</label>
+        <select id="year-range-start" aria-label="Start year for chart filter"></select>
+        <label for="year-range-end">To year</label>
+        <select id="year-range-end" aria-label="End year for chart filter"></select>
       </div>
 
-      <!-- Charts grid -->
+      <!-- Charts grid — 6 chart wrappers -->
       <div id="charts-grid" aria-label="Analytics charts">
-        <article class="chart-wrapper" aria-labelledby="chart-trend-label">
-          <h3 id="chart-trend-label">Forest Cover Trend</h3>
-          <canvas id="chart-trend" aria-label="Forest cover trend line chart"></canvas>
-        </article>
 
-        <article class="chart-wrapper" aria-labelledby="chart-loss-label">
-          <h3 id="chart-loss-label">Annual Forest Loss</h3>
-          <canvas id="chart-loss" aria-label="Annual forest loss bar chart"></canvas>
-        </article>
+        <!-- Chart 1: Forest Cover Trend -->
+        <div class="chart-wrapper">
+          <canvas id="chart-trend"
+                  aria-label="Forest Cover Trend (hectares by year)"
+                  role="img"></canvas>
+          <!-- Visually-hidden data table for screen readers; populated by charts.js -->
+          <table class="sr-only" aria-label="Forest Cover Trend data table">
+            <caption class="sr-only">Forest Cover Trend (hectares by year)</caption>
+            <thead><tr><th scope="col">Year</th><th scope="col">Forest Cover (ha)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
-        <article class="chart-wrapper" aria-labelledby="chart-province-label">
-          <h3 id="chart-province-label">Province Comparison</h3>
-          <canvas id="chart-province" aria-label="Province comparison radar chart"></canvas>
-        </article>
+        <!-- Chart 2: Annual Forest Loss -->
+        <div class="chart-wrapper">
+          <canvas id="chart-loss"
+                  aria-label="Annual Forest Loss (hectares by year)"
+                  role="img"></canvas>
+          <table class="sr-only" aria-label="Annual Forest Loss data table">
+            <caption class="sr-only">Annual Forest Loss (hectares by year)</caption>
+            <thead><tr><th scope="col">Year</th><th scope="col">Forest Loss (ha)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
-        <article class="chart-wrapper" aria-labelledby="chart-district-label">
-          <h3 id="chart-district-label">Top 10 Districts by Forest Loss</h3>
-          <canvas id="chart-district" aria-label="Top 10 districts by forest loss horizontal bar chart"></canvas>
-        </article>
+        <!-- Chart 3: Province Forest Comparison -->
+        <div class="chart-wrapper">
+          <canvas id="chart-province"
+                  aria-label="Province Forest Comparison"
+                  role="img"></canvas>
+          <table class="sr-only" aria-label="Province Forest Comparison data table">
+            <caption class="sr-only">Province Forest Comparison</caption>
+            <thead><tr><th scope="col">Province</th><th scope="col">Forest Cover (ha)</th><th scope="col">Forest Loss (ha)</th><th scope="col">Forest Gain (ha)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
-        <article class="chart-wrapper" aria-labelledby="chart-gain-label">
-          <h3 id="chart-gain-label">Forest Gain</h3>
-          <canvas id="chart-gain" aria-label="Annual forest gain bar chart"></canvas>
-        </article>
+        <!-- Chart 4: Top 10 Districts by Forest Loss -->
+        <div class="chart-wrapper">
+          <canvas id="chart-district"
+                  aria-label="Top 10 Districts by Forest Loss"
+                  role="img"></canvas>
+          <table class="sr-only" aria-label="Top 10 Districts by Forest Loss data table">
+            <caption class="sr-only">Top 10 Districts by Forest Loss</caption>
+            <thead><tr><th scope="col">District</th><th scope="col">Forest Loss (ha)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
-        <article class="chart-wrapper" aria-labelledby="chart-composition-label">
-          <h3 id="chart-composition-label">Forest Composition</h3>
-          <canvas id="chart-composition" aria-label="Forest type composition doughnut chart"></canvas>
-        </article>
+        <!-- Chart 5: Annual Forest Gain -->
+        <div class="chart-wrapper">
+          <canvas id="chart-gain"
+                  aria-label="Annual Forest Gain (hectares by year)"
+                  role="img"></canvas>
+          <table class="sr-only" aria-label="Annual Forest Gain data table">
+            <caption class="sr-only">Annual Forest Gain (hectares by year)</caption>
+            <thead><tr><th scope="col">Year</th><th scope="col">Forest Gain (ha)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- Chart 6: Forest Type Composition -->
+        <div class="chart-wrapper">
+          <canvas id="chart-composition"
+                  aria-label="Forest Type Composition"
+                  role="img"></canvas>
+          <table class="sr-only" aria-label="Forest Type Composition data table">
+            <caption class="sr-only">Forest Type Composition</caption>
+            <thead><tr><th scope="col">Forest Type</th><th scope="col">Percentage (%)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
       </div>
     </section>
 
@@ -176,7 +242,7 @@
                loading="lazy">
           <span class="slider-label">2018</span>
         </div>
-        <div class="slider-after" style="clip-path: inset(0 50% 0 0);">
+        <div class="slider-after" style="clip-path: inset(0 50% 0 0)">
           <img src="assets/images/satellite-2025.jpg"
                alt="Nepal forest cover 2025"
                loading="lazy">
@@ -215,14 +281,14 @@
       <article class="chart-wrapper" aria-labelledby="chart-historical-label">
         <h3 id="chart-historical-label">Historical vs. Predicted Forest Cover</h3>
         <canvas id="chart-historical-predicted"
-                aria-label="Historical and predicted forest cover line chart"></canvas>
+                aria-label="Historical vs Predicted Forest Cover"></canvas>
       </article>
 
       <!-- Future forest cover chart -->
       <article class="chart-wrapper" aria-labelledby="chart-future-label">
         <h3 id="chart-future-label">Projected Future Forest Cover (2026–2030)</h3>
         <canvas id="chart-future-cover"
-                aria-label="Projected future forest cover bar chart"></canvas>
+                aria-label="Future Forest Cover Projection 2026-2030"></canvas>
       </article>
     </section>
 
@@ -310,7 +376,117 @@
     <!-- Team Section -->
     <section id="team" aria-labelledby="team-heading">
       <h2 id="team-heading">Our Team</h2>
-      <div id="team-grid" aria-label="Team member profile cards"></div>
+      <div id="team-grid" aria-label="Team member profile cards">
+
+        <!-- Team Member 1 -->
+        <div class="team-card">
+          <img src="assets/images/team-subas.jpg"
+               alt="Subas Paudel"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ESP%3C/text%3E%3C/svg%3E'">
+          <div class="team-card-info">
+            <h3 class="team-member-name">Subas Paudel</h3>
+            <p class="team-member-role">Lead GIS &amp; Remote Sensing Analyst</p>
+            <p class="team-member-bio">Specialises in satellite imagery processing, NDVI analysis, and forest cover change detection for Nepal's 77 districts.</p>
+            <div class="team-member-links">
+              <a href="https://github.com/subaspaudel"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Subas Paudel on GitHub (opens in new tab)">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+              </a>
+              <a href="https://linkedin.com/in/subaspaudel"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Subas Paudel on LinkedIn (opens in new tab)">
+                <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="team-card">
+          <img src="assets/images/team-anita.jpg"
+               alt="Anita Sharma"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3EAS%3C/text%3E%3C/svg%3E'">
+          <div class="team-card-info">
+            <h3 class="team-member-name">Anita Sharma</h3>
+            <p class="team-member-role">Data Science &amp; Machine Learning Engineer</p>
+            <p class="team-member-bio">Designs and trains the XGBoost prediction model and maintains the Python data processing pipeline for annual forest statistics.</p>
+            <div class="team-member-links">
+              <a href="https://github.com/anitasharma"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Anita Sharma on GitHub (opens in new tab)">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+              </a>
+              <a href="https://linkedin.com/in/anitasharma"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Anita Sharma on LinkedIn (opens in new tab)">
+                <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="team-card">
+          <img src="assets/images/team-rajesh.jpg"
+               alt="Rajesh Thapa"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ERT%3C/text%3E%3C/svg%3E'">
+          <div class="team-card-info">
+            <h3 class="team-member-name">Rajesh Thapa</h3>
+            <p class="team-member-role">Frontend Developer &amp; Data Visualisation</p>
+            <p class="team-member-bio">Builds the interactive Leaflet map, Chart.js analytics dashboard, and ensures the platform is accessible and responsive across all devices.</p>
+            <div class="team-member-links">
+              <a href="https://github.com/rajeshthapa"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Rajesh Thapa on GitHub (opens in new tab)">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+              </a>
+              <a href="https://linkedin.com/in/rajeshthapa"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Rajesh Thapa on LinkedIn (opens in new tab)">
+                <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="team-card">
+          <img src="assets/images/team-priya.jpg"
+               alt="Priya Adhikari"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3EPA%3C/text%3E%3C/svg%3E'">
+          <div class="team-card-info">
+            <h3 class="team-member-name">Priya Adhikari</h3>
+            <p class="team-member-role">Environmental Research &amp; Policy Analyst</p>
+            <p class="team-member-bio">Translates satellite data into actionable conservation insights and liaises with Nepal's Department of Forests and Soil Conservation.</p>
+            <div class="team-member-links">
+              <a href="https://github.com/priyadhikari"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Priya Adhikari on GitHub (opens in new tab)">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+              </a>
+              <a href="https://linkedin.com/in/priyadhikari"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Priya Adhikari on LinkedIn (opens in new tab)">
+                <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </section>
 
     <!-- Contact Section -->
@@ -446,6 +622,22 @@
 
   <!-- CDN: Chart.js 4.4.0 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Scroll indicator keyboard support (Enter / Space → smooth scroll to #statistics) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.querySelector('.scroll-indicator');
+      if (btn) {
+        btn.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            var target = document.getElementById('statistics');
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+    });
+  </script>
 
   <!-- App entry point (ES6 module) -->
   <script type="module" src="js/main.js"></script>

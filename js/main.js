@@ -4,56 +4,14 @@
  */
 
 // ============================================================
-// EventBus — minimal pub/sub singleton
+// EventBus — imported for local use, and re-exported for consumers
 // ============================================================
 
-/** @type {Map<string, Set<Function>>} */
-const _listeners = new Map();
-
-export const EventBus = {
-  /**
-   * Subscribe to an event.
-   * @param {string}   event
-   * @param {Function} fn
-   */
-  on(event, fn) {
-    if (!_listeners.has(event)) {
-      _listeners.set(event, new Set());
-    }
-    _listeners.get(event).add(fn);
-  },
-
-  /**
-   * Unsubscribe from an event.
-   * @param {string}   event
-   * @param {Function} fn
-   */
-  off(event, fn) {
-    if (_listeners.has(event)) {
-      _listeners.get(event).delete(fn);
-    }
-  },
-
-  /**
-   * Emit an event with an optional payload.
-   * @param {string} event
-   * @param {*}      [payload]
-   */
-  emit(event, payload) {
-    if (_listeners.has(event)) {
-      for (const fn of _listeners.get(event)) {
-        try {
-          fn(payload);
-        } catch (err) {
-          console.error(`[EventBus] Error in handler for "${event}":`, err);
-        }
-      }
-    }
-  },
-};
+import { EventBus } from './eventbus.js';
+export { EventBus } from './eventbus.js';
 
 // ============================================================
-// Module imports (deferred — ES6 dynamic imports after paint)
+// Module imports
 // ============================================================
 
 import { loadAll } from './loader.js';
@@ -64,31 +22,27 @@ import { init as initUI } from './ui.js';
 import { init as initDashboard } from './dashboard.js';
 
 // ============================================================
-// Loading overlay helpers
-// ============================================================
-
-function showLoadingOverlay() {
-  const overlay = document.getElementById('loading-overlay');
-  if (overlay) {
-    overlay.style.display = 'flex';
-  }
-}
-
-function hideLoadingOverlay() {
-  const overlay = document.getElementById('loading-overlay');
-  if (!overlay) return;
-  overlay.classList.add('fade-out');
-  setTimeout(() => {
-    overlay.remove();
-  }, 300);
-}
-
-// ============================================================
 // Bootstrap
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  showLoadingOverlay();
+
+  // Mark HTML as JS-active so the section reveal animation kicks in
+  document.documentElement.classList.add('js-loaded');
+
+  // Immediately reveal sections already in the viewport so they're
+  // not stuck invisible while data is still loading.
+  document.querySelectorAll('section').forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      sec.classList.add('revealed');
+    }
+  });
+
+  // Safety fallback: reveal all sections after 8s in case JS errors block init
+  const revealFallback = setTimeout(() => {
+    document.querySelectorAll('section').forEach(s => s.classList.add('revealed'));
+  }, 8000);
 
   // Wire the footer year
   const yearEl = document.getElementById('footer-year');
@@ -96,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // data:loaded — initialise all modules in dependency order
   EventBus.on('data:loaded', ({ stats, prediction, risk, districtGeo, forestGeo }) => {
-    hideLoadingOverlay();
+    clearTimeout(revealFallback); // data loaded — cancel safety fallback
 
     // 1. UI first — renders skeleton → real stat cards, wires navbar/slider/reveals
     if (stats) initUI(stats, districtGeo);

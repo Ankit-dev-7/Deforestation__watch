@@ -7,7 +7,7 @@
  * This file is extended by tasks 7.2 and 7.3.
  */
 
-import { EventBus } from './main.js';
+import { EventBus } from './eventbus.js';
 import { getRiskColor, getRiskLevel, formatHa, formatNumber } from './utils.js';
 
 // ============================================================

@@ -6,7 +6,7 @@
  * NOTE: Chart (Chart.js) is a CDN global — not imported.
  */
 
-import { EventBus } from './main.js';
+import { EventBus } from './eventbus.js';
 import { getRiskColor, getRiskLevel, formatHa, formatNumber } from './utils.js';
 
 // ============================================================

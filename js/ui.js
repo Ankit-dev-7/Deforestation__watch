@@ -7,7 +7,7 @@
  *               19.2, 19.5, 20.1, 3.3
  */
 
-import { EventBus } from './main.js';
+import { EventBus } from './eventbus.js';
 import { formatNumber, formatHa, animateCounter, clamp, debounce } from './utils.js';
 
 // ─────────────────────────────────────────────────────────────
@@ -728,6 +728,9 @@ function _replaceNthChild(container, idx, newEl) {
 
 /**
  * Wire IntersectionObserver (threshold 0.1) on all sections for .revealed class.
+ * Sections already in the viewport when the observer is registered are revealed
+ * immediately to avoid them staying invisible if IntersectionObserver doesn't
+ * re-fire for already-visible elements.
  * Skips when prefers-reduced-motion is set.
  */
 function _initSectionReveal() {
@@ -748,7 +751,15 @@ function _initSectionReveal() {
     { threshold: 0.1 }
   );
 
-  sections.forEach(sec => observer.observe(sec));
+  sections.forEach(sec => {
+    // Immediately reveal sections already in the viewport
+    const rect = sec.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      sec.classList.add('revealed');
+    } else {
+      observer.observe(sec);
+    }
+  });
 }
 
 // ─────────────────────────────────────────────────────────────
