@@ -3,25 +3,29 @@
 
 /* ============================================================
    1. SECTION REVEAL (IntersectionObserver driven)
-   Only applied when JS is active (html.js-loaded class).
-   Sections are visible by default so content shows without JS.
-   Hero (#hero) is excluded — it must always be visible immediately.
+   Sections start visible. JS adds .section-hidden to non-visible
+   sections AFTER the hero is confirmed showing, then fades them in
+   via .revealed when they enter the viewport.
    ============================================================ */
-html.js-loaded section:not(#hero) {
+
+/* Only hide sections that JS has explicitly marked */
+html.js-loaded section.section-hidden {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 500ms ease, transform 500ms ease;
 }
 
+/* Revealed state — also covers sections that never got section-hidden */
+section,
 html.js-loaded section.revealed {
   opacity: 1;
   transform: none;
 }
 
-/* Hero is always fully visible */
-html.js-loaded #hero {
+html.js-loaded section.section-hidden.revealed {
   opacity: 1;
   transform: none;
+  transition: opacity 500ms ease, transform 500ms ease;
 }
 
 /* ============================================================
@@ -172,7 +176,7 @@ html.js-loaded #hero {
 
   /* Immediately show all sections — skip reveal animation */
   html.js-loaded section,
-  html.js-loaded section:not(#hero),
+  html.js-loaded section.section-hidden,
   section {
     opacity: 1;
     transform: none;

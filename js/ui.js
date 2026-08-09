@@ -14,14 +14,6 @@ import { formatNumber, formatHa, animateCounter, clamp, debounce } from './utils
 // MODULE-LEVEL STATE
 // ─────────────────────────────────────────────────────────────
 
-/** Grey SVG placeholder used when satellite images fail to load */
-const PLACEHOLDER_SVG =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E" +
-  "%3Crect width='800' height='500' fill='%23374151'/%3E" +
-  "%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' " +
-  "fill='%239ca3af' font-family='sans-serif' font-size='18'%3EImage not available%3C/text%3E" +
-  "%3C/svg%3E";
-
 /** Cached references so renderStatCards can update values without full re-render */
 const _cardValueEls = {};
 
@@ -152,7 +144,6 @@ export function init(stats, districtGeo) {
 
   // 4. Initialise sub-features
   _initNavbar();
-  _initDownloadCenter();
   _initSectionReveal();
   _initSlider();
   initParticles();
@@ -442,13 +433,8 @@ function _initSlider() {
   const container = document.getElementById('comparison-slider');
   if (!container) return;
 
-  // Attach onerror fallback to both images
-  container.querySelectorAll('img').forEach(img => {
-    img.onerror = function () {
-      this.onerror = null; // prevent loops
-      this.src = PLACEHOLDER_SVG;
-    };
-  });
+  // Keep the slider structure intact, but do not synthesize a fallback graphic
+  // when the comparison image assets cannot be loaded.
 
   // Set initial visual state
   updateSlider(50);
@@ -569,180 +555,29 @@ function _initNavbar() {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Download Center assets definition
-// ─────────────────────────────────────────────────────────────
-const DOWNLOAD_ASSETS = [
-  {
-    label:    'District GeoJSON',
-    file:     'data/district.geojson',
-    icon:     'fa-map',
-    description: 'Administrative district boundaries with forest metrics',
-    sizeHint: '~1.2 MB',
-  },
-  {
-    label:    'Forest Cover GeoJSON',
-    file:     'data/forest.geojson',
-    icon:     'fa-tree',
-    description: 'Forest cover, loss and gain polygons (2015–2026)',
-    sizeHint: '~3.8 MB',
-  },
-  {
-    label:    'Statistics JSON',
-    file:     'data/statistics.json',
-    icon:     'fa-chart-bar',
-    description: 'Yearly forest statistics for all 77 districts',
-    sizeHint: '~68 KB',
-  },
-  {
-    label:    'Risk Score JSON',
-    file:     'data/risk_score.json',
-    icon:     'fa-circle-exclamation',
-    description: 'Deforestation risk scores per district',
-    sizeHint: '~8 KB',
-  },
-];
-
 /**
- * Issue HEAD requests for each asset; render enabled or disabled download cards.
- */
-function _initDownloadCenter() {
-  const container = document.getElementById('download-cards');
-  if (!container) return;
-
-  // Show loading placeholders
-  container.innerHTML = '';
-  DOWNLOAD_ASSETS.forEach(() => {
-    const skel = document.createElement('div');
-    skel.className = 'skeleton-card';
-    container.appendChild(skel);
-  });
-
-  DOWNLOAD_ASSETS.forEach((asset, idx) => {
-    fetch(asset.file, { method: 'HEAD' })
-      .then(res => {
-        const card = _buildDownloadCard(asset, res.ok);
-        _replaceNthChild(container, idx, card);
-      })
-      .catch(() => {
-        const card = _buildDownloadCard(asset, false);
-        _replaceNthChild(container, idx, card);
-      });
-  });
-}
-
-/**
- * Build one download card, enabled or disabled.
- */
-function _buildDownloadCard(asset, available) {
-  const card = document.createElement('div');
-  card.className = 'download-card';
-  Object.assign(card.style, {
-    border:       `1px solid ${available ? '#22c55e' : '#374151'}`,
-    borderRadius: '0.75rem',
-    padding:      '1.25rem',
-    background:   '#1f2937',
-    display:      'flex',
-    flexDirection:'column',
-    gap:          '0.5rem',
-    opacity:      available ? '1' : '0.6',
-  });
-
-  if (!available) {
-    card.setAttribute('aria-disabled', 'true');
-  }
-
-  const iconRow = document.createElement('div');
-  iconRow.style.cssText = 'display:flex; align-items:center; gap:0.75rem;';
-
-  const iconEl = document.createElement('i');
-  iconEl.className = `fa-solid ${asset.icon}`;
-  iconEl.setAttribute('aria-hidden', 'true');
-  iconEl.style.cssText = `font-size:1.5rem; color:${available ? '#22c55e' : '#6b7280'};`;
-
-  const labelEl = document.createElement('span');
-  labelEl.style.cssText = 'font-weight:600; color:#f9fafb;';
-  labelEl.textContent = asset.label;
-
-  iconRow.appendChild(iconEl);
-  iconRow.appendChild(labelEl);
-
-  const descEl = document.createElement('p');
-  descEl.style.cssText = 'font-size:0.8rem; color:#9ca3af; margin:0;';
-  descEl.textContent = asset.description;
-
-  card.appendChild(iconRow);
-  card.appendChild(descEl);
-
-  if (available) {
-    const sizeEl = document.createElement('span');
-    sizeEl.style.cssText = 'font-size:0.75rem; color:#6b7280;';
-    sizeEl.textContent = asset.sizeHint;
-    card.appendChild(sizeEl);
-
-    const link = document.createElement('a');
-    link.href = asset.file;
-    link.download = asset.file.split('/').pop();
-    link.className = 'btn btn-primary';
-    Object.assign(link.style, {
-      display:      'inline-flex',
-      alignItems:   'center',
-      gap:          '0.4rem',
-      marginTop:    '0.25rem',
-      padding:      '0.5rem 1rem',
-      background:   '#16a34a',
-      color:        '#fff',
-      borderRadius: '0.5rem',
-      textDecoration:'none',
-      fontWeight:   '600',
-      fontSize:     '0.875rem',
-    });
-    link.innerHTML = '<i class="fa-solid fa-download" aria-hidden="true"></i> Download';
-    card.appendChild(link);
-  } else {
-    const unavail = document.createElement('span');
-    unavail.style.cssText = 'font-size:0.8rem; color:#ef4444; font-style:italic;';
-    unavail.textContent = 'Not available';
-    unavail.setAttribute('aria-label', `${asset.label} — Not available`);
-    card.appendChild(unavail);
-
-    // Prevent click propagation on disabled cards
-    card.addEventListener('click', e => e.preventDefault());
-    card.style.cursor = 'not-allowed';
-  }
-
-  return card;
-}
-
-/**
- * Replace the nth child of a container with a new element.
- */
-function _replaceNthChild(container, idx, newEl) {
-  const child = container.children[idx];
-  if (child) {
-    container.replaceChild(newEl, child);
-  } else {
-    container.appendChild(newEl);
-  }
-}
-
-/**
- * Wire IntersectionObserver (threshold 0.1) on all sections for .revealed class.
- * Sections already in the viewport when the observer is registered are revealed
- * immediately to avoid them staying invisible if IntersectionObserver doesn't
- * re-fire for already-visible elements.
+ * Wire IntersectionObserver (threshold 0.1) on section-hidden sections.
+ * When a hidden section scrolls into view, removes section-hidden and adds revealed.
  * Skips when prefers-reduced-motion is set.
  */
 function _initSectionReveal() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Ensure everything is visible if reduced-motion is preferred
+    document.querySelectorAll('section').forEach(s => {
+      s.classList.remove('section-hidden');
+      s.classList.add('revealed');
+    });
+    return;
+  }
 
-  const sections = document.querySelectorAll('section');
-  if (!sections.length) return;
+  const hiddenSections = document.querySelectorAll('section.section-hidden');
+  if (!hiddenSections.length) return;
 
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          entry.target.classList.remove('section-hidden');
           entry.target.classList.add('revealed');
           obs.unobserve(entry.target);
         }
@@ -751,15 +586,7 @@ function _initSectionReveal() {
     { threshold: 0.1 }
   );
 
-  sections.forEach(sec => {
-    // Immediately reveal sections already in the viewport
-    const rect = sec.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      sec.classList.add('revealed');
-    } else {
-      observer.observe(sec);
-    }
-  });
+  hiddenSections.forEach(sec => observer.observe(sec));
 }
 
 // ─────────────────────────────────────────────────────────────

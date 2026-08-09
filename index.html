@@ -43,10 +43,8 @@
         <li><a href="#map"           class="nav-link">Map</a></li>
         <li><a href="#time-explorer" class="nav-link">Timeline</a></li>
         <li><a href="#analytics"     class="nav-link">Analytics</a></li>
-        <li><a href="#comparison"    class="nav-link">Comparison</a></li>
         <li><a href="#prediction"    class="nav-link">Prediction</a></li>
         <li><a href="#insights"      class="nav-link">Insights</a></li>
-        <li><a href="#download"      class="nav-link">Download</a></li>
         <li><a href="#methodology"   class="nav-link">Methodology</a></li>
         <li><a href="#team"          class="nav-link">Team</a></li>
         <li><a href="#contact"       class="nav-link">Contact</a></li>
@@ -81,6 +79,10 @@
 
       <!-- Layer 2: hero content -->
       <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fa-solid fa-leaf" aria-hidden="true"></i>
+          <span>Nepal Environmental Monitoring</span>
+        </div>
         <h1 id="hero-heading" class="hero-title">Deforestation Watch Nepal</h1>
         <p class="hero-subtitle">
           Real-time GIS intelligence platform monitoring Nepal's forest cover dynamics,
@@ -231,36 +233,6 @@
       </div>
     </section>
 
-    <!-- Before/After Comparison Section -->
-    <section id="comparison" aria-labelledby="comparison-heading">
-      <h2 id="comparison-heading">Satellite Image Comparison</h2>
-
-      <div id="comparison-slider" class="slider-container">
-        <div class="slider-before">
-          <img src="assets/images/satellite-2018.jpg"
-               alt="Nepal forest cover 2018"
-               loading="lazy">
-          <span class="slider-label">2018</span>
-        </div>
-        <div class="slider-after" style="clip-path: inset(0 50% 0 0)">
-          <img src="assets/images/satellite-2025.jpg"
-               alt="Nepal forest cover 2025"
-               loading="lazy">
-          <span class="slider-label">2025</span>
-        </div>
-        <div class="slider-handle"
-             tabindex="0"
-             role="slider"
-             aria-label="Comparison divider"
-             aria-valuemin="0"
-             aria-valuemax="100"
-             aria-valuenow="50">
-          <div class="slider-line"></div>
-          <div class="slider-grip"></div>
-        </div>
-      </div>
-    </section>
-
     <!-- Prediction Dashboard Section -->
     <section id="prediction" aria-labelledby="prediction-heading">
       <h2 id="prediction-heading">Deforestation Risk Predictions</h2>
@@ -296,12 +268,6 @@
     <section id="insights" aria-labelledby="insights-heading">
       <h2 id="insights-heading">Environmental Insights</h2>
       <div id="insights-grid" aria-label="Auto-generated environmental insight cards"></div>
-    </section>
-
-    <!-- Download Center Section -->
-    <section id="download" aria-labelledby="download-heading">
-      <h2 id="download-heading">Download Center</h2>
-      <div id="download-cards" aria-label="Downloadable dataset cards"></div>
     </section>
 
     <!-- Methodology Section -->
@@ -618,7 +584,7 @@
 
   <!-- CDN: Leaflet JS 1.9.4 -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLcE=" crossorigin=""></script>
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- CDN: Chart.js 4.4.0 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>

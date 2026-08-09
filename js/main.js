@@ -30,19 +30,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Mark HTML as JS-active so the section reveal animation kicks in
   document.documentElement.classList.add('js-loaded');
 
-  // Immediately reveal sections already in the viewport so they're
-  // not stuck invisible while data is still loading.
+  // Reveal sections: immediately show any section already in the viewport,
+  // mark the rest as section-hidden so they can animate in on scroll.
+  // Hero is always shown immediately.
   document.querySelectorAll('section').forEach(sec => {
     const rect = sec.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
+    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inViewport || sec.id === 'hero') {
       sec.classList.add('revealed');
+    } else {
+      sec.classList.add('section-hidden');
     }
   });
 
-  // Safety fallback: reveal all sections after 8s in case JS errors block init
+  // Safety fallback: reveal ALL sections after 5s regardless
   const revealFallback = setTimeout(() => {
-    document.querySelectorAll('section').forEach(s => s.classList.add('revealed'));
-  }, 8000);
+    document.querySelectorAll('section').forEach(s => {
+      s.classList.remove('section-hidden');
+      s.classList.add('revealed');
+    });
+  }, 5000);
 
   // Wire the footer year
   const yearEl = document.getElementById('footer-year');
