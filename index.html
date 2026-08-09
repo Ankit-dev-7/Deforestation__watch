@@ -45,7 +45,6 @@
         <li><a href="#analytics"     class="nav-link">Analytics</a></li>
         <li><a href="#prediction"    class="nav-link">Prediction</a></li>
         <li><a href="#insights"      class="nav-link">Insights</a></li>
-        <li><a href="#methodology"   class="nav-link">Methodology</a></li>
         <li><a href="#team"          class="nav-link">Team</a></li>
         <li><a href="#contact"       class="nav-link">Contact</a></li>
       </ul>
@@ -270,75 +269,6 @@
       <div id="insights-grid" aria-label="Auto-generated environmental insight cards"></div>
     </section>
 
-    <!-- Methodology Section -->
-    <section id="methodology" aria-labelledby="methodology-heading">
-      <h2 id="methodology-heading">Methodology</h2>
-
-      <article aria-labelledby="methodology-satellite-heading">
-        <h3 id="methodology-satellite-heading">
-          <i class="fa-solid fa-satellite" aria-hidden="true"></i>
-          Satellite Imagery Acquisition
-        </h3>
-        <p>Multispectral satellite imagery is acquired from LANDSAT and Sentinel-2 archives covering Nepal's administrative districts at 10–30 m resolution.</p>
-      </article>
-
-      <article aria-labelledby="methodology-pipeline-heading">
-        <h3 id="methodology-pipeline-heading">
-          <i class="fa-brands fa-python" aria-hidden="true"></i>
-          Python Analysis Pipeline
-        </h3>
-        <p>Imagery is processed through a Python pipeline using rasterio, GDAL, and scikit-learn to extract spectral indices and classify land cover types.</p>
-      </article>
-
-      <article aria-labelledby="methodology-qgis-heading">
-        <h3 id="methodology-qgis-heading">
-          <i class="fa-solid fa-map" aria-hidden="true"></i>
-          QGIS Workflow
-        </h3>
-        <p>QGIS is used for spatial preprocessing, coordinate system standardisation, and manual validation of automated classifications.</p>
-      </article>
-
-      <article aria-labelledby="methodology-geojson-heading">
-        <h3 id="methodology-geojson-heading">
-          <i class="fa-solid fa-file-code" aria-hidden="true"></i>
-          GeoJSON Generation
-        </h3>
-        <p>Processed spatial layers are exported to GeoJSON format using GDAL's ogr2ogr utility, optimised for browser-based Leaflet.js rendering.</p>
-      </article>
-
-      <article aria-labelledby="methodology-cleaning-heading">
-        <h3 id="methodology-cleaning-heading">
-          <i class="fa-solid fa-broom" aria-hidden="true"></i>
-          Data Cleaning
-        </h3>
-        <p>Outlier detection and gap-filling methods are applied to annual forest cover time series to ensure temporal consistency across all 77 districts.</p>
-      </article>
-
-      <article aria-labelledby="methodology-trend-heading">
-        <h3 id="methodology-trend-heading">
-          <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
-          Trend Analysis
-        </h3>
-        <p>Linear regression and Mann-Kendall trend tests are applied to detect statistically significant forest cover change at district and provincial level.</p>
-      </article>
-
-      <article aria-labelledby="methodology-model-heading">
-        <h3 id="methodology-model-heading">
-          <i class="fa-solid fa-brain" aria-hidden="true"></i>
-          Prediction Model Architecture
-        </h3>
-        <p>A gradient-boosted decision tree ensemble (XGBoost) is trained on 10-year historical data to forecast district-level forest cover through 2030, outputting risk scores and confidence intervals.</p>
-      </article>
-
-      <article aria-labelledby="methodology-limitations-heading">
-        <h3 id="methodology-limitations-heading">
-          <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-          Known Limitations
-        </h3>
-        <p>Cloud cover during monsoon season reduces imagery availability for some districts. Prediction accuracy degrades for years beyond the 5-year forecast horizon.</p>
-      </article>
-    </section>
-
     <!-- Team Section -->
     <section id="team" aria-labelledby="team-heading">
       <h2 id="team-heading">Our Team</h2>
@@ -346,25 +276,27 @@
 
         <!-- Team Member 1 -->
         <div class="team-card">
-          <img src="assets/images/team-subas.jpg"
-               alt="Subas Paudel"
+          <img src="assets/images/team-ankit.jpg"
+               alt="Ankit Gaire"
                loading="lazy"
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ESP%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
-            <h3 class="team-member-name">Subas Paudel</h3>
+            <h3 class="team-member-name">Ankit Gaire
+            
+            </h3>
             <p class="team-member-role">Lead GIS &amp; Remote Sensing Analyst</p>
             <p class="team-member-bio">Specialises in satellite imagery processing, NDVI analysis, and forest cover change detection for Nepal's 77 districts.</p>
             <div class="team-member-links">
-              <a href="https://github.com/subaspaudel"
+              <a href="https://github.com/ankitgaire"
                  target="_blank"
                  rel="noopener noreferrer"
-                 aria-label="Subas Paudel on GitHub (opens in new tab)">
+                 aria-label="Ankit Gaire on GitHub (opens in new tab)">
                 <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
               </a>
-              <a href="https://linkedin.com/in/subaspaudel"
+              <a href="https://linkedin.com/in/ankitgaire"
                  target="_blank"
                  rel="noopener noreferrer"
-                 aria-label="Subas Paudel on LinkedIn (opens in new tab)">
+                 aria-label="Ankit Gaire on LinkedIn (opens in new tab)">
                 <i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn
               </a>
             </div>
@@ -562,7 +494,7 @@
             </a>
           </li>
           <li>
-            <a href="#methodology" aria-label="Methodology documentation">
+            <a href="#" aria-label="Documentation">
               <i class="fa-solid fa-book" aria-hidden="true"></i> Documentation
             </a>
           </li>
