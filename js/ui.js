@@ -147,7 +147,6 @@ export function init(stats, districtGeo) {
   _initSectionReveal();
   _initSlider();
   initParticles();
-  _initContactForm();
 
   // 5. Render initial insights (no year filter on initial load)
   renderInsights(null);
@@ -688,101 +687,5 @@ export function initParticles() {
   };
 }
 
-// ─────────────────────────────────────────────────────────────
-// TASK 15.2 — CONTACT FORM VALIDATION
-// ─────────────────────────────────────────────────────────────
-
-/**
- * Wire contact form client-side validation.
- * Validates Name, Email, Subject, Message.
- * On invalid: shows field-level error messages, does NOT clear form.
- * On valid:   resets form, shows #contact-success.
- */
-function _initContactForm() {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
-
-  const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-
-  /**
-   * Set or clear a field error message.
-   * @param {string} fieldId  e.g. 'contact-name'
-   * @param {string} message  Empty string clears the error.
-   */
-  function _setError(fieldId, message) {
-    const errEl = document.getElementById(`${fieldId}-error`);
-    if (errEl) {
-      errEl.textContent = message;
-      errEl.style.display = message ? 'block' : 'none';
-    }
-    const inputEl = document.getElementById(fieldId);
-    if (inputEl) {
-      if (message) {
-        inputEl.setAttribute('aria-invalid', 'true');
-        inputEl.setAttribute('aria-describedby', `${fieldId}-error`);
-      } else {
-        inputEl.removeAttribute('aria-invalid');
-      }
-    }
-  }
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-
-    const name    = document.getElementById('contact-name');
-    const email   = document.getElementById('contact-email');
-    const subject = document.getElementById('contact-subject');
-    const message = document.getElementById('contact-message');
-
-    let valid = true;
-
-    // Clear previous errors
-    ['contact-name', 'contact-email', 'contact-subject', 'contact-message'].forEach(id => {
-      _setError(id, '');
-    });
-
-    // Validate Name
-    if (!name || name.value.trim() === '') {
-      _setError('contact-name', 'Name is required.');
-      valid = false;
-    }
-
-    // Validate Email
-    if (!email || email.value.trim() === '') {
-      _setError('contact-email', 'Email is required.');
-      valid = false;
-    } else if (!EMAIL_RE.test(email.value.trim())) {
-      _setError('contact-email', 'Please enter a valid email address.');
-      valid = false;
-    }
-
-    // Validate Subject
-    if (!subject || subject.value.trim() === '') {
-      _setError('contact-subject', 'Subject is required.');
-      valid = false;
-    }
-
-    // Validate Message
-    if (!message || message.value.trim() === '') {
-      _setError('contact-message', 'Message is required.');
-      valid = false;
-    }
-
-    if (!valid) return; // Do NOT clear fields; do NOT show success
-
-    // All fields valid
-    form.reset();
-    const successEl = document.getElementById('contact-success');
-    if (successEl) {
-      successEl.removeAttribute('hidden');
-      successEl.style.display = 'block';
-      // Auto-hide after 8 s
-      setTimeout(() => {
-        successEl.setAttribute('hidden', '');
-        successEl.style.display = '';
-      }, 8000);
-    }
-  });
-}
 
 // (EventBus subscriptions are registered inside init() above)
