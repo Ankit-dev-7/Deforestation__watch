@@ -511,7 +511,9 @@
 
         <!-- Contact form -->
         <form id="contact-form" novalidate aria-label="Contact form">
-          <div class="form-field">
+          <!-- Web3Forms access key (hidden) -->
+          <input type="hidden" name="access_key" value="52929366-04f2-4730-92de-6ac9fd7df9e8">
+          <div class="form-field">                           
             <label for="contact-name">Name <span aria-hidden="true">*</span></label>
             <input type="text"
                    id="contact-name"
@@ -536,17 +538,6 @@
           </div>
 
           <div class="form-field">
-            <label for="contact-subject">Subject <span aria-hidden="true">*</span></label>
-            <input type="text"
-                   id="contact-subject"
-                   name="subject"
-                   required
-                   aria-required="true"
-                   placeholder="How can we help?">
-            <span class="field-error" id="contact-subject-error" role="alert" aria-live="polite"></span>
-          </div>
-
-          <div class="form-field">
             <label for="contact-message">Message <span aria-hidden="true">*</span></label>
             <textarea id="contact-message"
                       name="message"
@@ -559,11 +550,17 @@
 
           <button type="submit" id="contact-submit">
             <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
-            Send Message
+            <span id="contact-submit-text">Send Message</span>
           </button>
 
           <div id="contact-success" role="status" aria-live="polite" hidden>
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
             Message sent successfully. We'll be in touch soon.
+          </div>
+
+          <div id="contact-error" role="alert" aria-live="polite" hidden>
+            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+            Something went wrong. Please try again later.
           </div>
         </form>
       </div>

@@ -689,3 +689,151 @@ export function initParticles() {
 
 
 // (EventBus subscriptions are registered inside init() above)
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Contact Form — Web3Forms integration
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/**
+ * Initialise the contact form with client-side validation and
+ * Web3Forms submission (https://web3forms.com).
+ * Called once from main.js after DOMContentLoaded.
+ */
+export function initContactForm() {
+  const form       = document.getElementById('contact-form');
+  const submitBtn  = document.getElementById('contact-submit');
+  const submitText = document.getElementById('contact-submit-text');
+  const successEl  = document.getElementById('contact-success');
+  const errorEl    = document.getElementById('contact-error');
+
+  if (!form) return;
+
+  // Field descriptors for validation
+  const fields = [
+    { id: 'contact-name',    errorId: 'contact-name-error',    label: 'Name' },
+    { id: 'contact-email',   errorId: 'contact-email-error',   label: 'Email' },
+    { id: 'contact-message', errorId: 'contact-message-error', label: 'Message' },
+  ];
+
+  /** Show an inline error message for a field */
+  function setFieldError(errorId, msg) {
+    const el = document.getElementById(errorId);
+    if (el) { el.textContent = msg; }
+  }
+
+  /** Clear all inline errors */
+  function clearErrors() {
+    fields.forEach(f => setFieldError(f.errorId, ''));
+    successEl.hidden = true;
+    errorEl.hidden   = true;
+  }
+
+  /** Validate all fields; return true if form is valid */
+  function validate() {
+    let valid = true;
+
+    fields.forEach(({ id, errorId, label }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const val = el.value.trim();
+
+      if (!val) {
+        setFieldError(errorId, `${label} is required.`);
+        valid = false;
+        return;
+      }
+
+      // Email format check
+      if (id === 'contact-email') {
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRe.test(val)) {
+          setFieldError(errorId, 'Please enter a valid email address.');
+          valid = false;
+        }
+      }
+    });
+
+    return valid;
+  }
+
+  /** Set the button into loading / normal state */
+  function setLoading(loading) {
+    submitBtn.disabled = loading;
+    if (submitText) {
+      submitText.textContent = loading ? 'Sending…' : 'Send Message';
+    }
+    const icon = submitBtn.querySelector('i');
+    if (icon) {
+      icon.className = loading
+        ? 'fa-solid fa-spinner fa-spin'
+        : 'fa-solid fa-paper-plane';
+      icon.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  /** Show only one banner at a time and auto-dismiss after 5 s */
+  function showBanner(el, html) {
+    // Hide both first
+    successEl.hidden = true;
+    errorEl.hidden   = true;
+
+    el.innerHTML = html;
+    el.hidden    = false;
+
+    // Auto-hide after 5 seconds
+    clearTimeout(el._dismissTimer);
+    el._dismissTimer = setTimeout(() => { el.hidden = true; }, 5000);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    if (!validate()) {
+      showBanner(
+        errorEl,
+        '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Please fill in all required fields correctly.'
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const formData = new FormData(form);
+      const object   = Object.fromEntries(formData.entries());
+      const json     = JSON.stringify(object);
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body:    json,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        showBanner(
+          successEl,
+          '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Message sent successfully. We\'ll be in touch soon.'
+        );
+        form.reset();
+      } else {
+        showBanner(
+          errorEl,
+          '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Something went wrong. Please try again later.'
+        );
+        console.error('Web3Forms error:', data);
+      }
+    } catch (err) {
+      showBanner(
+        errorEl,
+        '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Something went wrong. Please try again later.'
+      );
+      console.error('Network error:', err);
+    } finally {
+      setLoading(false);
+    }
+  });
+}

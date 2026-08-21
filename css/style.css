@@ -1603,10 +1603,31 @@ main section:nth-of-type(even) {
 }
 
 #contact-success {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 1rem;
   background: var(--color-primary-pale);
   color: var(--color-primary-deep);
   border: 1px solid rgba(22, 163, 74, 0.3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+#contact-success[hidden],
+#contact-error[hidden] {
+  display: none !important;
+}
+
+#contact-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;

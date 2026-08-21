@@ -19,6 +19,7 @@ import { init as initMap } from './map.js';
 import { init as initCharts } from './charts.js';
 import { init as initPrediction } from './prediction.js';
 import { init as initUI } from './ui.js';
+import { initContactForm } from './ui.js';
 import { init as initDashboard } from './dashboard.js';
 
 // ============================================================
@@ -54,6 +55,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Wire the footer year
   const yearEl = document.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // Wire the contact form (Web3Forms)
+  initContactForm();
 
   // data:loaded — initialise all modules in dependency order
   EventBus.on('data:loaded', ({ stats, prediction, risk, districtGeo, forestGeo }) => {
