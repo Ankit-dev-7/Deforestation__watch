@@ -1731,3 +1731,45 @@ main section:nth-of-type(even) {
   border-color: transparent;
   transform: translateY(-1px);
 }
+
+/* ============================================================
+   29. FOOTER BRANDING — COSOG Nepal affiliation
+   ============================================================ */
+.footer-branding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem 1.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: center;
+}
+
+.footer-branding-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  display: block;
+  opacity: 0.92;
+  transition: opacity var(--transition-fast);
+}
+
+.footer-branding-logo:hover {
+  opacity: 1;
+}
+
+.footer-branding-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: #e5e7eb;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.footer-branding-tagline {
+  font-size: var(--text-xs);
+  color: #6b7280;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
