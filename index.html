@@ -84,7 +84,7 @@
         <h1 id="hero-heading" class="hero-title">Deforestation Watch Nepal</h1>
         <p class="hero-subtitle">
           Real-time GIS intelligence platform monitoring Nepal's forest cover dynamics,
-          deforestation risk, data from 2015 to 2026.
+          deforestation risk, data from 2015 to 2025.
         </p>
 
         <!-- Hero stat placeholder cards (Forest Cover, Forest Loss, Forest Gain).
@@ -131,96 +131,343 @@
            style="min-height: 600px;"></div>
     </section>
 
+    <!-- Time Explorer — Year selector that drives year:changed events to all sections -->
+    <section id="time-explorer" aria-labelledby="time-explorer-heading">
+      <h2 id="time-explorer-heading" class="sr-only">Time Explorer</h2>
+      <div class="time-explorer-wrap">
+        <span class="time-explorer-label">
+          <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+          Explore by Year
+        </span>
+        <div id="year-timeline"
+             role="toolbar"
+             aria-label="Select year to filter all data"
+             tabindex="0"></div>
+      </div>
+    </section>
+
     <!-- Analytics Dashboard Section -->
     <section id="analytics" aria-labelledby="analytics-heading">
-      <h2 id="analytics-heading">Analytics Dashboard</h2>
 
-      <!-- Year-range filter controls (above charts grid) -->
-      <!-- charts.js populates these <select> elements with <option> nodes via populateYearRangeSelects() -->
-      <div id="year-range-controls" aria-label="Chart year range filter">
-        <label for="year-range-start">From year</label>
-        <select id="year-range-start" aria-label="Start year for chart filter"></select>
-        <label for="year-range-end">To year</label>
-        <select id="year-range-end" aria-label="End year for chart filter"></select>
+      <!-- ── Dashboard Header ── -->
+      <div class="adash-header">
+        <div class="adash-header__text">
+          <h2 id="analytics-heading">Forest Change Analytics</h2>
+          <p class="adash-header__subtitle">
+            Explore forest cover, loss, gain, and regional changes across Nepal
+            through historical data and interactive visualizations.
+          </p>
+        </div>
       </div>
 
-      <!-- Charts grid — 6 chart wrappers -->
-      <div id="charts-grid" aria-label="Analytics charts">
+      <!-- ── Filter Bar ── -->
+      <div id="adash-filters" role="search" aria-label="Dashboard filters">
+        <div class="adash-filter-group">
+          <label for="adash-year-start" class="adash-filter-label">From</label>
+          <select id="adash-year-start" class="adash-select" aria-label="Start year"></select>
+        </div>
+        <div class="adash-filter-group">
+          <label for="adash-year-end" class="adash-filter-label">To</label>
+          <select id="adash-year-end" class="adash-select" aria-label="End year"></select>
+        </div>
+        <div class="adash-filter-group">
+          <label for="adash-province" class="adash-filter-label">Province</label>
+          <select id="adash-province" class="adash-select" aria-label="Filter by province">
+            <option value="all">All Provinces</option>
+            <option value="Koshi">Koshi</option>
+            <option value="Madhesh">Madhesh</option>
+            <option value="Bagmati">Bagmati</option>
+            <option value="Gandaki">Gandaki</option>
+            <option value="Lumbini">Lumbini</option>
+            <option value="Karnali">Karnali</option>
+            <option value="Sudurpashchim">Sudurpashchim</option>
+          </select>
+        </div>
+        <div class="adash-filter-group">
+          <label for="adash-district" class="adash-filter-label">District</label>
+          <select id="adash-district" class="adash-select" aria-label="Filter by district">
+            <option value="all">All Districts</option>
+          </select>
+        </div>
+        <button id="adash-reset" class="adash-reset-btn" type="button"
+                aria-label="Reset all filters to defaults">
+          <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+          Reset
+        </button>
+      </div>
 
-        <!-- Chart 1: Forest Cover Trend -->
-        <div class="chart-wrapper">
+      <!-- ── KPI Cards ── -->
+      <div id="adash-kpi-grid" aria-label="Key forest statistics" role="list">
+
+        <div class="adash-kpi-card" role="listitem" aria-label="Total Forest Cover">
+          <div class="adash-kpi-card__icon adash-kpi-card__icon--cover">
+            <i class="fa-solid fa-tree" aria-hidden="true"></i>
+          </div>
+          <div class="adash-kpi-card__body">
+            <span class="adash-kpi-card__label">Total Forest Cover</span>
+            <span class="adash-kpi-card__value" id="kpi-cover">—</span>
+            <span class="adash-kpi-card__unit">ha</span>
+          </div>
+          <div class="adash-kpi-card__delta" id="kpi-cover-delta" aria-live="polite"></div>
+        </div>
+
+        <div class="adash-kpi-card" role="listitem" aria-label="Forest Loss">
+          <div class="adash-kpi-card__icon adash-kpi-card__icon--loss">
+            <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
+          </div>
+          <div class="adash-kpi-card__body">
+            <span class="adash-kpi-card__label">Forest Loss</span>
+            <span class="adash-kpi-card__value" id="kpi-loss">—</span>
+            <span class="adash-kpi-card__unit">ha</span>
+          </div>
+          <div class="adash-kpi-card__delta" id="kpi-loss-delta" aria-live="polite"></div>
+        </div>
+
+        <div class="adash-kpi-card" role="listitem" aria-label="Forest Gain">
+          <div class="adash-kpi-card__icon adash-kpi-card__icon--gain">
+            <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i>
+          </div>
+          <div class="adash-kpi-card__body">
+            <span class="adash-kpi-card__label">Forest Gain</span>
+            <span class="adash-kpi-card__value" id="kpi-gain">—</span>
+            <span class="adash-kpi-card__unit">ha</span>
+          </div>
+          <div class="adash-kpi-card__delta" id="kpi-gain-delta" aria-live="polite"></div>
+        </div>
+
+        <div class="adash-kpi-card" role="listitem" aria-label="Net Forest Change">
+          <div class="adash-kpi-card__icon adash-kpi-card__icon--net">
+            <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+          </div>
+          <div class="adash-kpi-card__body">
+            <span class="adash-kpi-card__label">Net Forest Change</span>
+            <span class="adash-kpi-card__value" id="kpi-net">—</span>
+            <span class="adash-kpi-card__unit">ha</span>
+          </div>
+          <div class="adash-kpi-card__delta" id="kpi-net-delta" aria-live="polite"></div>
+        </div>
+
+      </div>
+
+      <!-- ── Row 1: Forest Change Over Time (full width) ── -->
+      <div class="adash-chart-card adash-chart-card--full" id="adash-trend-card">
+        <div class="adash-chart-card__header">
+          <div>
+            <h3 class="adash-chart-title">Forest Change Over Time</h3>
+            <p class="adash-chart-subtitle">Annual forest cover, loss, and gain (hectares)</p>
+          </div>
+          <div class="adash-chart-legend" id="adash-trend-legend" aria-label="Chart legend — click to toggle datasets"></div>
+        </div>
+        <div class="adash-chart-canvas-wrap">
           <canvas id="chart-trend"
-                  aria-label="Forest Cover Trend (hectares by year)"
+                  aria-label="Forest Change Over Time — line chart"
                   role="img"></canvas>
-          <!-- Visually-hidden data table for screen readers; populated by charts.js -->
-          <table class="sr-only" aria-label="Forest Cover Trend data table">
-            <caption class="sr-only">Forest Cover Trend (hectares by year)</caption>
-            <thead><tr><th scope="col">Year</th><th scope="col">Forest Cover (ha)</th></tr></thead>
-            <tbody></tbody>
-          </table>
         </div>
+        <table class="sr-only" aria-label="Forest Change Over Time data">
+          <thead><tr><th scope="col">Year</th><th scope="col">Forest Cover (ha)</th><th scope="col">Forest Loss (ha)</th><th scope="col">Forest Gain (ha)</th></tr></thead>
+          <tbody id="adash-trend-sr-tbody"></tbody>
+        </table>
+      </div>
 
-        <!-- Chart 2: Annual Forest Loss -->
-        <div class="chart-wrapper">
-          <canvas id="chart-loss"
-                  aria-label="Annual Forest Loss (hectares by year)"
-                  role="img"></canvas>
-          <table class="sr-only" aria-label="Annual Forest Loss data table">
-            <caption class="sr-only">Annual Forest Loss (hectares by year)</caption>
+      <!-- ── Row 2: Annual Loss + Gain vs Loss ── -->
+      <div class="adash-row-2">
+
+        <!-- Annual Forest Loss -->
+        <div class="adash-chart-card" id="adash-loss-card">
+          <div class="adash-chart-card__header">
+            <div>
+              <h3 class="adash-chart-title">Annual Forest Loss</h3>
+              <p class="adash-chart-subtitle">Hectares lost per year</p>
+            </div>
+          </div>
+          <div class="adash-chart-canvas-wrap">
+            <canvas id="chart-loss"
+                    aria-label="Annual Forest Loss bar chart"
+                    role="img"></canvas>
+          </div>
+          <!-- Peak loss insight strip -->
+          <div class="adash-insight-strip" id="adash-peak-loss-strip" aria-live="polite">
+            <div class="adash-insight-strip__item">
+              <span class="adash-insight-strip__label">Peak Loss Year</span>
+              <span class="adash-insight-strip__value" id="adash-peak-year">—</span>
+            </div>
+            <div class="adash-insight-strip__item">
+              <span class="adash-insight-strip__label">Forest Loss</span>
+              <span class="adash-insight-strip__value" id="adash-peak-val">—</span>
+            </div>
+          </div>
+          <table class="sr-only" aria-label="Annual Forest Loss data">
             <thead><tr><th scope="col">Year</th><th scope="col">Forest Loss (ha)</th></tr></thead>
-            <tbody></tbody>
+            <tbody id="adash-loss-sr-tbody"></tbody>
           </table>
         </div>
 
-        <!-- Chart 3: Province Forest Comparison -->
-        <div class="chart-wrapper">
-          <canvas id="chart-province"
-                  aria-label="Province Forest Comparison"
-                  role="img"></canvas>
-          <table class="sr-only" aria-label="Province Forest Comparison data table">
-            <caption class="sr-only">Province Forest Comparison</caption>
-            <thead><tr><th scope="col">Province</th><th scope="col">Forest Cover (ha)</th><th scope="col">Forest Loss (ha)</th><th scope="col">Forest Gain (ha)</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-        <!-- Chart 4: Top 10 Districts by Forest Loss -->
-        <div class="chart-wrapper">
-          <canvas id="chart-district"
-                  aria-label="Top 10 Districts by Forest Loss"
-                  role="img"></canvas>
-          <table class="sr-only" aria-label="Top 10 Districts by Forest Loss data table">
-            <caption class="sr-only">Top 10 Districts by Forest Loss</caption>
-            <thead><tr><th scope="col">District</th><th scope="col">Forest Loss (ha)</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-        <!-- Chart 5: Annual Forest Gain -->
-        <div class="chart-wrapper">
-          <canvas id="chart-gain"
-                  aria-label="Annual Forest Gain (hectares by year)"
-                  role="img"></canvas>
-          <table class="sr-only" aria-label="Annual Forest Gain data table">
-            <caption class="sr-only">Annual Forest Gain (hectares by year)</caption>
-            <thead><tr><th scope="col">Year</th><th scope="col">Forest Gain (ha)</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-        <!-- Chart 6: Forest Type Composition -->
-        <div class="chart-wrapper">
-          <canvas id="chart-composition"
-                  aria-label="Forest Type Composition"
-                  role="img"></canvas>
-          <table class="sr-only" aria-label="Forest Type Composition data table">
-            <caption class="sr-only">Forest Type Composition</caption>
-            <thead><tr><th scope="col">Forest Type</th><th scope="col">Percentage (%)</th></tr></thead>
-            <tbody></tbody>
+        <!-- Forest Gain vs Loss -->
+        <div class="adash-chart-card" id="adash-gainloss-card">
+          <div class="adash-chart-card__header">
+            <div>
+              <h3 class="adash-chart-title">Forest Gain vs Forest Loss</h3>
+              <p class="adash-chart-subtitle">Annual comparison (hectares)</p>
+            </div>
+          </div>
+          <div class="adash-chart-canvas-wrap">
+            <canvas id="chart-gain"
+                    aria-label="Forest Gain vs Forest Loss grouped bar chart"
+                    role="img"></canvas>
+          </div>
+          <div class="adash-insight-strip" id="adash-net-strip" aria-live="polite">
+            <div class="adash-insight-strip__item">
+              <span class="adash-insight-strip__label">Net Forest Change</span>
+              <span class="adash-insight-strip__value" id="adash-net-strip-val">—</span>
+            </div>
+          </div>
+          <table class="sr-only" aria-label="Forest Gain vs Loss data">
+            <thead><tr><th scope="col">Year</th><th scope="col">Forest Gain (ha)</th><th scope="col">Forest Loss (ha)</th></tr></thead>
+            <tbody id="adash-gainloss-sr-tbody"></tbody>
           </table>
         </div>
 
       </div>
+
+      <!-- ── Row 3: Province Comparison + Top 10 Districts ── -->
+      <div class="adash-row-2">
+
+        <!-- Province Comparison -->
+        <div class="adash-chart-card" id="adash-province-card">
+          <div class="adash-chart-card__header">
+            <div>
+              <h3 class="adash-chart-title">Forest Change by Province</h3>
+              <p class="adash-chart-subtitle">Nepal's seven provinces</p>
+            </div>
+            <div class="adash-metric-switch" role="group" aria-label="Select metric for province chart">
+              <button class="adash-metric-btn adash-metric-btn--active" data-metric="forestLossHa" aria-pressed="true">Loss</button>
+              <button class="adash-metric-btn" data-metric="forestCoverHa" aria-pressed="false">Cover</button>
+              <button class="adash-metric-btn" data-metric="forestGainHa" aria-pressed="false">Gain</button>
+              <button class="adash-metric-btn" data-metric="netChange" aria-pressed="false">Net</button>
+            </div>
+          </div>
+          <div class="adash-chart-canvas-wrap">
+            <canvas id="chart-province"
+                    aria-label="Forest change by province horizontal bar chart"
+                    role="img"></canvas>
+          </div>
+          <table class="sr-only" aria-label="Province forest data">
+            <thead><tr><th scope="col">Province</th><th scope="col">Forest Cover (ha)</th><th scope="col">Forest Loss (ha)</th><th scope="col">Forest Gain (ha)</th></tr></thead>
+            <tbody id="adash-province-sr-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Top 10 Districts -->
+        <div class="adash-chart-card" id="adash-district-card">
+          <div class="adash-chart-card__header">
+            <div>
+              <h3 class="adash-chart-title">Top 10 Districts by Forest Loss</h3>
+              <p class="adash-chart-subtitle" id="adash-district-subtitle">Ranked by forest loss (ha)</p>
+            </div>
+            <div class="adash-metric-switch" role="group" aria-label="Select ranking metric for districts">
+              <button class="adash-district-btn adash-metric-btn--active" data-dmetric="forestLossHa" aria-pressed="true">Loss</button>
+              <button class="adash-district-btn" data-dmetric="forestGainHa" aria-pressed="false">Gain</button>
+              <button class="adash-district-btn" data-dmetric="netChange" aria-pressed="false">Net</button>
+            </div>
+          </div>
+          <div class="adash-ranking-list" id="adash-ranking-list" aria-label="Top 10 districts ranked list" role="list"></div>
+          <table class="sr-only" aria-label="Top 10 Districts data">
+            <thead><tr><th scope="col">Rank</th><th scope="col">District</th><th scope="col">Value (ha)</th></tr></thead>
+            <tbody id="adash-district-sr-tbody"></tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ── Row 4: Forest Composition + Key Findings ── -->
+      <div class="adash-row-2">
+
+        <!-- Forest Composition -->
+        <div class="adash-chart-card" id="adash-composition-card">
+          <div class="adash-chart-card__header">
+            <div>
+              <h3 class="adash-chart-title">Forest Composition</h3>
+              <p class="adash-chart-subtitle">By forest type (% of total) — <span id="adash-composition-scope">Nepal (National)</span></p>
+            </div>
+          </div>
+          <div class="adash-donut-wrap">
+            <div class="adash-donut-canvas-area">
+              <canvas id="chart-composition"
+                      aria-label="Forest type composition donut chart"
+                      role="img"></canvas>
+              <div class="adash-donut-center" aria-hidden="true">
+                <span class="adash-donut-center__label">Total Forest</span>
+                <span class="adash-donut-center__value" id="adash-donut-total">—</span>
+              </div>
+            </div>
+            <div class="adash-composition-legend" id="adash-composition-legend"></div>
+          </div>
+          <table class="sr-only" aria-label="Forest Composition data">
+            <thead><tr><th scope="col">Forest Type</th><th scope="col">Percentage (%)</th></tr></thead>
+            <tbody id="adash-composition-sr-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Key Findings -->
+        <div class="adash-chart-card" id="adash-findings-card">
+          <div class="adash-chart-card__header">
+            <div>
+              <h3 class="adash-chart-title">Key Findings</h3>
+              <p class="adash-chart-subtitle">Automatically derived from selected data</p>
+            </div>
+          </div>
+          <div class="adash-findings-grid" id="adash-findings-grid" aria-live="polite" aria-label="Key findings"></div>
+        </div>
+
+      </div>
+
+      <!-- ── Detailed Data Table ── -->
+      <div class="adash-chart-card adash-chart-card--full" id="adash-table-card">
+        <div class="adash-chart-card__header">
+          <div>
+            <h3 class="adash-chart-title">Detailed Data</h3>
+            <p class="adash-chart-subtitle">Yearly forest statistics — click column headers to sort</p>
+          </div>
+          <button class="adash-toggle-btn" id="adash-table-toggle"
+                  aria-expanded="true" aria-controls="adash-table-wrap">
+            <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div id="adash-table-wrap" class="adash-table-wrap">
+          <div class="adash-table-scroll">
+            <table id="adash-data-table" class="adash-data-table" aria-label="Detailed yearly forest data">
+              <thead>
+                <tr>
+                  <th scope="col" class="adash-th adash-th--sortable" data-col="year" aria-sort="none">
+                    Year <span class="adash-sort-icon" aria-hidden="true"></span>
+                  </th>
+                  <th scope="col" class="adash-th adash-th--sortable" data-col="forestCoverHa" aria-sort="none">
+                    Forest Cover <span class="adash-sort-icon" aria-hidden="true"></span>
+                  </th>
+                  <th scope="col" class="adash-th adash-th--sortable" data-col="forestLossHa" aria-sort="none">
+                    Forest Loss <span class="adash-sort-icon" aria-hidden="true"></span>
+                  </th>
+                  <th scope="col" class="adash-th adash-th--sortable" data-col="forestGainHa" aria-sort="none">
+                    Forest Gain <span class="adash-sort-icon" aria-hidden="true"></span>
+                  </th>
+                  <th scope="col" class="adash-th adash-th--sortable" data-col="netChange" aria-sort="none">
+                    Net Change <span class="adash-sort-icon" aria-hidden="true"></span>
+                  </th>
+                  <th scope="col" class="adash-th" data-col="changePct">
+                    Change %
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="adash-table-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legacy canvas IDs kept for charts.js backward compat (hidden, zero-size) -->
+      <!-- charts.js still initialises these but they are replaced by new analytics.js -->
+      <canvas id="chart-district" aria-hidden="true" style="display:none" width="0" height="0"></canvas>
+
     </section>
 
     <!-- Prediction Dashboard Section -->
@@ -246,12 +493,6 @@
                 aria-label="Historical vs Predicted Forest Cover"></canvas>
       </article>
 
-      <!-- Future forest cover chart -->
-      <article class="chart-wrapper" aria-labelledby="chart-future-label">
-        <h3 id="chart-future-label">Projected Future Forest Cover (2026–2030)</h3>
-        <canvas id="chart-future-cover"
-                aria-label="Future Forest Cover Projection 2026-2030"></canvas>
-      </article>
     </section>
 
     <!-- Environmental Insights Section -->
@@ -274,7 +515,7 @@
           <div class="team-card-info">
             <h3 class="team-member-name">Ashish Pandey</h3>
             <p class="team-member-role">Mentor</p>
-            <p class="team-member-bio"></p>AI Research Intern at CAIR-Nepal</p>
+            <p class="team-member-bio">AI Research Intern at CAIR-Nepal</p>
             <div class="team-member-links">
               <a href="https://github.com/Ashish-Pandey62"
                  target="_blank"
@@ -402,7 +643,7 @@
 
         <!-- Team Member 6 -->
         <div class="team-card">
-          <img src="assets/images/team-member-6.jpg"
+          <img src="Photos/dipti.jpg"
                alt="Dipti"
                loading="lazy"
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ESK%3C/text%3E%3C/svg%3E'">
@@ -411,13 +652,13 @@
             <p class="team-member-role">Data Analyst</p>
             <p class="team-member-bio">A member of Project</p>
             <div class="team-member-links">
-              <a href="https://github.com/sabinakarki"
+              <a href="https://github.com/diptiojha793"
                  target="_blank"
                  rel="noopener noreferrer"
                  aria-label="Dipti on GitHub (opens in new tab)">
                 <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
               </a>
-              <a href="https://linkedin.com/in/sabinakarki"
+              <a href="https://www.linkedin.com/in/dipti-ojha-8902aa362/"
                  target="_blank"
                  rel="noopener noreferrer"
                  aria-label="Dipti on LinkedIn (opens in new tab)">

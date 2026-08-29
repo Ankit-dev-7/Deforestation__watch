@@ -1773,3 +1773,871 @@ main section:nth-of-type(even) {
   letter-spacing: 0.04em;
   margin: 0;
 }
+
+
+/* ============================================================
+   ANALYTICS DASHBOARD — Professional Forest Intelligence Panel
+   All classes prefixed with "adash-" to prevent collisions
+   ============================================================ */
+
+/* ── Section override ── */
+#analytics {
+  background: var(--color-background);
+  padding-bottom: 4rem;
+}
+
+/* ── Dashboard Header ── */
+.adash-header {
+  margin-bottom: 1.75rem;
+}
+
+.adash-header h2 {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 0.375rem;
+}
+
+.adash-header__subtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  max-width: 680px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Filter Bar ── */
+#adash-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  padding: 0.875rem 1.125rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.75rem;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.adash-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.adash-filter-group + .adash-filter-group::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 1.25rem;
+  background: var(--color-border);
+  margin-right: 0.25rem;
+}
+
+.adash-filter-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.adash-select {
+  padding: 0.35rem 0.75rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  min-width: 0;
+}
+
+.adash-select:hover {
+  border-color: var(--color-primary);
+}
+
+.adash-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.adash-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.adash-reset-btn:hover {
+  background: var(--color-surface-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.adash-reset-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── KPI Cards ── */
+#adash-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.adash-kpi-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem 1.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.adash-kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.adash-kpi-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: rgba(22, 163, 74, 0.2);
+}
+
+.adash-kpi-card:hover::after {
+  opacity: 1;
+}
+
+/* KPI icon */
+.adash-kpi-card__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  flex-shrink: 0;
+}
+
+.adash-kpi-card__icon--cover {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--color-primary-dark);
+}
+.adash-kpi-card__icon--loss {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+.adash-kpi-card__icon--gain {
+  background: rgba(3, 105, 161, 0.1);
+  color: #0369a1;
+}
+.adash-kpi-card__icon--net {
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--color-neutral-600);
+}
+
+/* KPI accent bottom bar colors */
+.adash-kpi-card:nth-child(1)::after { background: var(--color-primary); }
+.adash-kpi-card:nth-child(2)::after { background: #dc2626; }
+.adash-kpi-card:nth-child(3)::after { background: #0369a1; }
+.adash-kpi-card:nth-child(4)::after { background: var(--color-neutral-500); }
+
+.adash-kpi-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.adash-kpi-card__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.adash-kpi-card__value {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.adash-kpi-card__value--negative { color: #dc2626; }
+.adash-kpi-card__value--positive { color: var(--color-primary-dark); }
+
+.adash-kpi-card__unit {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.adash-kpi-card__delta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  min-height: 1.2em;
+}
+
+.adash-kpi-card__delta--up   { color: var(--color-primary-dark); font-weight: 600; }
+.adash-kpi-card__delta--down { color: #dc2626; font-weight: 600; }
+
+/* ── Chart Cards (shared) ── */
+.adash-chart-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 1.625rem 1.375rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.adash-chart-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(22, 163, 74, 0.18);
+}
+
+.adash-chart-card--full {
+  margin-bottom: 1.5rem;
+}
+
+.adash-chart-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.adash-chart-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.2rem;
+}
+
+.adash-chart-subtitle {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Two-column row ── */
+.adash-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Canvas wrapper ── */
+.adash-chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.adash-chart-canvas-wrap canvas {
+  max-height: 320px;
+  width: 100% !important;
+}
+
+#adash-trend-card .adash-chart-canvas-wrap canvas {
+  max-height: 340px;
+}
+
+/* ── Trend legend ── */
+#adash-trend-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.adash-legend-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-background);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.adash-legend-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.adash-legend-btn--hidden {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.adash-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Insight Strip (below loss / gain charts) ── */
+.adash-insight-strip {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.625rem 0.875rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-lg);
+}
+
+.adash-insight-strip__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.adash-insight-strip__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.adash-insight-strip__value {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ── Metric Switch Buttons ── */
+.adash-metric-switch {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.adash-metric-btn,
+.adash-district-btn {
+  padding: 0.3rem 0.65rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-background);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.02em;
+}
+
+.adash-metric-btn:hover,
+.adash-district-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.adash-metric-btn--active {
+  background: var(--color-primary-dark);
+  color: #fff;
+  border-color: var(--color-primary-dark);
+}
+
+/* ── District Ranking List ── */
+.adash-ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.adash-rank-row {
+  display: grid;
+  grid-template-columns: 1.5rem 7rem 1fr 5.5rem;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.adash-rank-row:hover {
+  background: var(--color-background);
+}
+
+.adash-rank-num {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.adash-rank-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adash-rank-bar-wrap {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.adash-rank-bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.adash-rank-val {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Donut / Composition ── */
+.adash-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.adash-donut-canvas-area {
+  position: relative;
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+}
+
+.adash-donut-canvas-area canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: unset !important;
+}
+
+.adash-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.adash-donut-center__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.adash-donut-center__value {
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.adash-composition-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.adash-comp-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adash-comp-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.adash-comp-legend-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  flex: 1;
+  min-width: 0;
+}
+
+.adash-comp-legend-pct {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* ── Key Findings ── */
+.adash-findings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.adash-finding-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-lg);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.adash-finding-card:hover {
+  background: var(--color-surface-soft);
+  border-color: rgba(22, 163, 74, 0.2);
+}
+
+.adash-finding-card__icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.findings-icon--loss     { background: rgba(220,38,38,0.1); color: #dc2626; }
+.findings-icon--gain     { background: rgba(3,105,161,0.1);  color: #0369a1; }
+.findings-icon--province { background: rgba(22,163,74,0.1);  color: var(--color-primary-dark); }
+.findings-icon--neutral  { background: rgba(100,116,139,0.1); color: var(--color-neutral-600); }
+
+.adash-finding-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.adash-finding-card__title {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.adash-finding-card__value {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.adash-finding-card__detail {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* ── Positive / Negative value colors ── */
+.adash-val--positive { color: var(--color-primary-dark); }
+.adash-val--negative { color: #dc2626; }
+
+/* ── Data Table ── */
+.adash-table-wrap {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  max-height: 600px;
+}
+
+.adash-table-wrap--collapsed {
+  max-height: 0 !important;
+}
+
+.adash-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.adash-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.adash-data-table thead {
+  background: var(--color-background);
+  border-bottom: 1.5px solid var(--color-border);
+}
+
+.adash-th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  position: relative;
+  user-select: none;
+}
+
+.adash-th--sortable:hover {
+  color: var(--color-primary-dark);
+  background: rgba(22, 163, 74, 0.04);
+}
+
+.adash-sort-icon {
+  font-size: var(--text-xs);
+  opacity: 0.8;
+}
+
+.adash-data-table tbody tr {
+  border-bottom: 1px solid var(--color-border-soft);
+  transition: background var(--transition-fast);
+}
+
+.adash-data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.adash-data-table tbody tr:hover {
+  background: var(--color-surface-soft);
+}
+
+.adash-td {
+  padding: 0.625rem 1rem;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.adash-td--year {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.adash-td--loss { color: #dc2626; }
+.adash-td--gain { color: #0369a1; }
+
+/* ── Table toggle button ── */
+.adash-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.adash-toggle-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+  background: var(--color-surface-soft);
+}
+
+/* ── Empty / loading states ── */
+.adash-empty {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+/* ============================================================
+   COMPARISON SLIDER — #comparison-slider aliases .slider-container
+   + wrapper / hint / label styles added for prediction section
+   ============================================================ */
+#comparison-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl, 1rem);
+  min-height: 320px;
+  cursor: col-resize;
+  user-select: none;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0,0,0,.07));
+  background: var(--color-surface-soft);
+}
+
+.comparison-slider-wrap {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl, 0.75rem);
+}
+
+.comparison-slider-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.comparison-slider-hint {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.slider-label {
+  position: absolute;
+  top: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.slider-label--before { left: 0.75rem; }
+.slider-label--after  { right: 0.75rem; }
+
+/* Colour the two halves so the slider is visible even without images */
+.slider-before {
+  background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+}
+
+.slider-after {
+  background: linear-gradient(135deg, #854d0e 0%, #92400e 100%);
+}
+
+#comparison-slider .slider-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: rgba(255,255,255,0.9);
+  cursor: col-resize;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider-handle__line {
+  flex: 1;
+  width: 2px;
+  background: rgba(255,255,255,0.5);
+}
+
+.slider-handle__circle {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  color: var(--color-primary-dark, #15803d);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ── Time Explorer section wrap ── */
+.time-explorer-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.time-explorer-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}

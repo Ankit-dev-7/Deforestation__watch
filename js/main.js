@@ -21,6 +21,7 @@ import { init as initPrediction } from './prediction.js';
 import { init as initUI } from './ui.js';
 import { initContactForm } from './ui.js';
 import { init as initDashboard } from './dashboard.js';
+import { init as initAnalytics } from './analytics.js';
 
 // ============================================================
 // Bootstrap
@@ -66,16 +67,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. UI first — renders skeleton → real stat cards, wires navbar/slider/reveals
     if (stats) initUI(stats, districtGeo);
 
-    // 2. Map — needs geo data
-    initMap(districtGeo, forestGeo, risk);
+    // 2. Map — needs geo data; skip if both layers unavailable
+    if (districtGeo || forestGeo || risk) {
+      initMap(districtGeo, forestGeo, risk);
+    }
 
-    // 3. Charts — needs yearlyData
+    // 3. Analytics Dashboard — initialised before legacy charts so it owns
+    //    the shared canvas IDs (chart-trend, chart-loss, chart-gain,
+    //    chart-province, chart-composition) that are now part of the new layout.
+    //    initCharts() will still wire year-range highlight via EventBus but
+    //    its canvas lookups for chart-district return the hidden stub element,
+    //    which is safe (returns null → no-op).
+    if (stats) initAnalytics(stats);
+
+    // 4. Legacy charts module — kept for EventBus year-highlight on shared
+    //    canvases; canvas IDs already claimed by analytics.js so Chart.js
+    //    will attach to the existing instances via the DOM elements.
+    //    Guard: only call if yearlyData present.
     if (stats) initCharts(stats);
 
-    // 4. Prediction — needs prediction + risk data
-    if (prediction && risk) initPrediction(prediction, risk, stats);
+    // 5. Prediction — needs prediction + risk data.
+    //    stats is passed regardless of whether it loaded; prediction.js
+    //    handles the null case by showing a user-visible notice in the chart.
+    if (prediction && risk) {
+      if (!stats) {
+        console.warn('[main.js] statistics.json unavailable — prediction charts will lack historical context.');
+      }
+      initPrediction(prediction, risk, stats);
+    }
 
-    // 5. Dashboard (Time Explorer) — emits year:changed(defaultYear) last
+    // 6. Dashboard (Time Explorer) — emits year:changed(defaultYear) last,
+    //    which both analytics.js and prediction.js subscribe to.
     if (stats && stats.yearlyData) {
       initDashboard(stats.yearlyData);
     }

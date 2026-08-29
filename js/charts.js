@@ -4,10 +4,36 @@
  * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 6.10, 6.11, 7.2, 18.2, 19.7
  *
  * NOTE: Chart (Chart.js) is a CDN global — not imported.
+ *
+ * NOTE: analytics.js (loaded first in main.js) claims the shared canvas IDs
+ * (chart-trend, chart-loss, chart-gain, chart-province, chart-composition).
+ * Each buildXxxChart() guard-checks via Chart.getChart(canvas) and returns
+ * early when a Chart.js instance already exists on the element.  This avoids
+ * the "Canvas is already in use" error while preserving the year-highlight
+ * EventBus subscription that prediction.js depends on.
  */
 
 import { EventBus } from './eventbus.js';
 import { formatHa, formatNumber } from './utils.js';
+
+// ============================================================
+// Guard helper — returns true when the canvas already has an owner
+// ============================================================
+
+/**
+ * Check whether a canvas element already has a Chart.js instance attached.
+ * Chart.getChart() is available on Chart.js ≥ 3.
+ * @param {HTMLCanvasElement|null} canvas
+ * @returns {boolean}
+ */
+function _canvasOwned(canvas) {
+  if (!canvas) return true; // treat missing element as "skip"
+  try {
+    return !!Chart.getChart(canvas);
+  } catch (_) {
+    return false;
+  }
+}
 
 // ============================================================
 // Module-level state
@@ -134,7 +160,7 @@ function populateYearRangeSelects(yearlyData) {
  */
 function buildTrendChart(data) {
   const canvas = document.getElementById('chart-trend');
-  if (!canvas) return null;
+  if (!canvas || _canvasOwned(canvas)) return null;
 
   const labels = data.map(d => d.year);
   const values = data.map(d => d.forestCoverHa);
@@ -189,7 +215,7 @@ function buildTrendChart(data) {
  */
 function buildLossChart(data) {
   const canvas = document.getElementById('chart-loss');
-  if (!canvas) return null;
+  if (!canvas || _canvasOwned(canvas)) return null;
 
   const labels = data.map(d => d.year);
   const values = data.map(d => d.forestLossHa);
@@ -237,7 +263,7 @@ function buildLossChart(data) {
  */
 function buildProvinceChart(provinces) {
   const canvas = document.getElementById('chart-province');
-  if (!canvas) return null;
+  if (!canvas || _canvasOwned(canvas)) return null;
 
   const labels = provinces.map(p => p.name);
 
@@ -294,7 +320,7 @@ function buildProvinceChart(provinces) {
  */
 function buildDistrictChart(districts) {
   const canvas = document.getElementById('chart-district');
-  if (!canvas) return null;
+  if (!canvas || _canvasOwned(canvas)) return null;
 
   const top10 = [...districts]
     .sort((a, b) => b.forestLossHa - a.forestLossHa)
@@ -344,7 +370,7 @@ function buildDistrictChart(districts) {
  */
 function buildGainChart(data) {
   const canvas = document.getElementById('chart-gain');
-  if (!canvas) return null;
+  if (!canvas || _canvasOwned(canvas)) return null;
 
   const labels = data.map(d => d.year);
   const values = data.map(d => d.forestGainHa);
@@ -392,7 +418,7 @@ function buildGainChart(data) {
  */
 function buildCompositionChart(composition) {
   const canvas = document.getElementById('chart-composition');
-  if (!canvas) return null;
+  if (!canvas || _canvasOwned(canvas)) return null;
 
   buildAccessibilityTable(
     canvas,
@@ -414,7 +440,9 @@ function buildCompositionChart(composition) {
     options: {
       animation: defaultAnimation(),
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: ctx => `${ctx.label}: ${ctx.raw}%`,
@@ -482,9 +510,22 @@ function updateTimeSeriesCharts(filtered) {
 
 /**
  * Highlight the bar/point corresponding to `year` on the time-series charts.
+ *
+ * analytics.js now owns chart-trend / chart-loss / chart-gain and handles
+ * year-snapping itself via EventBus 'year:changed'. To avoid overwriting
+ * analytics.js's carefully managed multi-dataset colors, this function is
+ * a no-op when any of those canvases are already owned (i.e. analytics.js
+ * is running). It only runs for the legacy single-module setup where
+ * charts.js built the instances itself.
  * @param {number} year
  */
 export function filterChartsToYear(year) {
+  // If analytics.js has claimed the canvases, defer entirely to it.
+  try {
+    const trendCanvas = document.getElementById('chart-trend');
+    if (trendCanvas && Chart.getChart(trendCanvas)) return;
+  } catch (_) { /* Chart global not yet ready — fall through */ }
+
   /** @param {Chart} chart  @param {number|null} targetYear */
   const highlightYear = (chart, targetYear, baseColor) => {
     if (!chart || !chart.data.labels) return;
