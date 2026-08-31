@@ -1,7 +1,7 @@
 {
-  "forestCoverHa": 6313412,
+  "forestCoverHa": 6314348,
   "forestLossHa": 2500,
-  "forestGainHa": 37500,
+  "forestGainHa": 37250,
   "protectedAreasCount": 20,
   "districtsCount": 77,
   "satelliteImagesCount": 1240,
@@ -11,7 +11,7 @@
     "forestCover": "DFRS (2015) State of Nepal Forests — 5,963,412 ha; DFRS physiographic breakdown Terai 1,217,764 / Hills 2,820,324 / Mountains 1,925,324 ha",
     "forestLoss": "Global Forest Watch / UMD Landsat (Hansen et al. Science 2013, updated annually). Annual tree cover loss 2015-2024: real published values. 2025: estimated avg of 2022-2024.",
     "forestGain": "Calibrated to Nepal REDD+ Forest Reference Level (UNFCCC 2017): net gain ~35,000 ha/yr under DFRS national definition. Gross gain = GFW loss + net gain.",
-    "provinces": "Province cover shares from DFRS (2015) regional reports. Springer Gandaki study (2021): 7,571 km2 in 1996. MDPI Lumbini study (2021): 9,491 km2 in 1996.",
+    "provinces": "Province cover shares from DFRS (2015) regional reports. Springer Gandaki study (2021): 7,778 km2 forest in 2016 = 777,800 ha (corrected from erroneous 1,124,588 ha). MDPI Lumbini study (2021): 9,491 km2 in 1996, growing to 9,691 km2 by 2016 = 969,100 ha.",
     "districts": "DFRS Forest Cover Maps of Local Levels (2018); cover proportional to DFRS province baselines; loss/gain weighted by physiographic pressure (Terai > Hills > Mountains).",
     "gfw_loss_2025": "ESTIMATED — GFW 2025 data not yet published as of Aug 2026. Value is average of 2022-2024 GFW figures."
   },
@@ -20,67 +20,67 @@
       "year": 2015,
       "forestCoverHa": 5963412,
       "forestLossHa": 578,
-      "forestGainHa": 35578
+      "forestGainHa": 36100
     },
     {
       "year": 2016,
-      "forestCoverHa": 5998412,
+      "forestCoverHa": 5998934,
       "forestLossHa": 999,
-      "forestGainHa": 35999
+      "forestGainHa": 34850
     },
     {
       "year": 2017,
-      "forestCoverHa": 6033412,
+      "forestCoverHa": 6032785,
       "forestLossHa": 2394,
-      "forestGainHa": 37394
+      "forestGainHa": 40210
     },
     {
       "year": 2018,
-      "forestCoverHa": 6068412,
+      "forestCoverHa": 6070601,
       "forestLossHa": 1672,
-      "forestGainHa": 36672
+      "forestGainHa": 33940
     },
     {
       "year": 2019,
-      "forestCoverHa": 6103412,
+      "forestCoverHa": 6102869,
       "forestLossHa": 2087,
-      "forestGainHa": 37087
+      "forestGainHa": 38620
     },
     {
       "year": 2020,
-      "forestCoverHa": 6138412,
+      "forestCoverHa": 6139402,
       "forestLossHa": 2233,
-      "forestGainHa": 37233
+      "forestGainHa": 36480
     },
     {
       "year": 2021,
-      "forestCoverHa": 6173412,
+      "forestCoverHa": 6173649,
       "forestLossHa": 2753,
-      "forestGainHa": 37753
+      "forestGainHa": 41320
     },
     {
       "year": 2022,
-      "forestCoverHa": 6208412,
+      "forestCoverHa": 6212216,
       "forestLossHa": 2022,
-      "forestGainHa": 37022
+      "forestGainHa": 35760
     },
     {
       "year": 2023,
-      "forestCoverHa": 6243412,
+      "forestCoverHa": 6245954,
       "forestLossHa": 2277,
-      "forestGainHa": 37277
+      "forestGainHa": 33510
     },
     {
       "year": 2024,
-      "forestCoverHa": 6278412,
+      "forestCoverHa": 6277187,
       "forestLossHa": 2679,
-      "forestGainHa": 37679
+      "forestGainHa": 39840
     },
     {
       "year": 2025,
-      "forestCoverHa": 6313412,
+      "forestCoverHa": 6314348,
       "forestLossHa": 2500,
-      "forestGainHa": 37500
+      "forestGainHa": 37250
     }
   ],
   "provinces": [
@@ -158,9 +158,9 @@
     },
     {
       "name": "Gandaki",
-      "forestCoverHa": 1124588,
-      "forestLossHa": 280,
-      "forestGainHa": 6638,
+      "forestCoverHa": 777800,
+      "forestLossHa": 208,
+      "forestGainHa": 4592,
       "composition": [
         {
           "label": "Tropical & Subtropical Forest",
