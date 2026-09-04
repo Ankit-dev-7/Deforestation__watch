@@ -212,16 +212,55 @@ export function getFilteredYearlyData() {
 }
 
 /**
- * Get districts filtered by the active province filter.
- * Enriches each district with a `netChange` field.
+ * Get districts filtered by the active province/district filter,
+ * with loss/gain/cover values scaled to the selected year range.
+ *
+ * District data in statistics.json is a static snapshot covering the full
+ * dataset period. To make values respond to the year-range filter we scale
+ * each district proportionally, using the same ratio approach as
+ * getFilteredProvinces(): (national metric in selected range) / (national
+ * metric over full dataset).
+ *
  * @returns {Array}
  */
 export function getFilteredDistricts() {
   if (!_stats?.districts) return [];
-  let districts = _stats.districts.map(d => ({
-    ...d,
-    netChange: (d.forestGainHa ?? 0) - (d.forestLossHa ?? 0),
-  }));
+
+  // ── Compute year-range scale ratios ──────────────────────────
+  const allYears = _stats.yearlyData ?? [];
+  const { yearStart, yearEnd } = _filter;
+
+  const fullLoss  = allYears.reduce((s, d) => s + (d.forestLossHa ?? 0), 0);
+  const fullGain  = allYears.reduce((s, d) => s + (d.forestGainHa ?? 0), 0);
+
+  const rangeYears = allYears.filter(d => d.year >= yearStart && d.year <= yearEnd);
+  const rangeLoss  = rangeYears.reduce((s, d) => s + (d.forestLossHa ?? 0), 0);
+  const rangeGain  = rangeYears.reduce((s, d) => s + (d.forestGainHa ?? 0), 0);
+
+  const lossRatio = fullLoss > 0 ? rangeLoss / fullLoss : 1;
+  const gainRatio = fullGain > 0 ? rangeGain / fullGain : 1;
+
+  // Cover ratio: national cover at year-end vs last data point
+  const lastEntry    = allYears[allYears.length - 1];
+  const yearEndEntry = rangeYears.length ? rangeYears[rangeYears.length - 1] : lastEntry;
+  const coverRatio   = lastEntry?.forestCoverHa > 0
+    ? (yearEndEntry?.forestCoverHa ?? lastEntry.forestCoverHa) / lastEntry.forestCoverHa
+    : 1;
+
+  // ── Build scaled + filtered district list ────────────────────
+  let districts = _stats.districts.map(d => {
+    const scaledLoss  = Math.round((d.forestLossHa  ?? 0) * lossRatio);
+    const scaledGain  = Math.round((d.forestGainHa  ?? 0) * gainRatio);
+    const scaledCover = Math.round((d.forestCoverHa ?? 0) * coverRatio);
+    return {
+      ...d,
+      forestLossHa:  scaledLoss,
+      forestGainHa:  scaledGain,
+      forestCoverHa: scaledCover,
+      netChange:     scaledGain - scaledLoss,
+    };
+  });
+
   if (_filter.province !== 'all') {
     districts = districts.filter(
       d => DISTRICT_PROVINCE_MAP[d.name] === _filter.province
@@ -235,6 +274,7 @@ export function getFilteredDistricts() {
 
 /**
  * Get provinces, enriched with netChange.
+ * Returns static snapshot values — use getFilteredProvinces() for filter-aware data.
  * @returns {Array}
  */
 export function getProvinces() {
@@ -243,6 +283,63 @@ export function getProvinces() {
     ...p,
     netChange: (p.forestGainHa ?? 0) - (p.forestLossHa ?? 0),
   }));
+}
+
+/**
+ * Get provinces scaled to the current filter state (year range + province selection).
+ *
+ * Loss and gain figures are proportionally scaled from the static province snapshot
+ * using the ratio: (national loss/gain in the selected year range) / (national full-range total).
+ * Forest cover is taken from the yearly entry closest to the selected year-end.
+ * When a specific province is selected, only that province is returned.
+ *
+ * @returns {Array<{name, forestCoverHa, forestLossHa, forestGainHa, netChange}>}
+ */
+export function getFilteredProvinces() {
+  if (!_stats?.provinces || !_stats?.yearlyData) return getProvinces();
+
+  const allYears     = _stats.yearlyData;
+  const { yearStart, yearEnd, province } = _filter;
+
+  // National totals over the FULL dataset (denominator for scaling)
+  const fullLoss  = allYears.reduce((s, d) => s + (d.forestLossHa ?? 0), 0);
+  const fullGain  = allYears.reduce((s, d) => s + (d.forestGainHa ?? 0), 0);
+
+  // National totals over the SELECTED year range (numerator for scaling)
+  const filtered  = allYears.filter(d => d.year >= yearStart && d.year <= yearEnd);
+  const rangeLoss = filtered.reduce((s, d) => s + (d.forestLossHa ?? 0), 0);
+  const rangeGain = filtered.reduce((s, d) => s + (d.forestGainHa ?? 0), 0);
+
+  // Scale ratios — fall back to 1 if full total is zero to avoid NaN
+  const lossRatio  = fullLoss > 0 ? rangeLoss / fullLoss : 1;
+  const gainRatio  = fullGain > 0 ? rangeGain / fullGain : 1;
+
+  // Cover ratio: pick the national cover at year-end vs the dataset's last entry
+  const lastEntry  = allYears[allYears.length - 1];
+  const yearEndEntry = filtered.length
+    ? filtered[filtered.length - 1]
+    : lastEntry;
+  const coverRatio = lastEntry?.forestCoverHa > 0
+    ? (yearEndEntry?.forestCoverHa ?? lastEntry.forestCoverHa) / lastEntry.forestCoverHa
+    : 1;
+
+  // Build scaled province list
+  let provinces = _stats.provinces.map(p => {
+    const scaledLoss  = Math.round((p.forestLossHa  ?? 0) * lossRatio);
+    const scaledGain  = Math.round((p.forestGainHa  ?? 0) * gainRatio);
+    const scaledCover = Math.round((p.forestCoverHa ?? 0) * coverRatio);
+    return {
+      ...p,
+      forestLossHa:  scaledLoss,
+      forestGainHa:  scaledGain,
+      forestCoverHa: scaledCover,
+      netChange:     scaledGain - scaledLoss,
+    };
+  });
+
+  // Province chart always shows all 7 provinces regardless of the province filter
+  // (the filter only applies to other widgets like the trend chart and KPIs)
+  return provinces;
 }
 
 /**
@@ -555,15 +652,13 @@ function _buildTrendChart() {
   const yearly = getFilteredYearlyData();
 
   const labels   = yearly.map(d => d.year);
-  const coverDs  = yearly.map(d => d.forestCoverHa);
   const lossDs   = yearly.map(d => d.forestLossHa);
   const gainDs   = yearly.map(d => d.forestGainHa);
 
   if (_chartTrend) {
     _chartTrend.data.labels              = labels;
-    _chartTrend.data.datasets[0].data   = coverDs;
-    _chartTrend.data.datasets[1].data   = lossDs;
-    _chartTrend.data.datasets[2].data   = gainDs;
+    _chartTrend.data.datasets[0].data   = lossDs;
+    _chartTrend.data.datasets[1].data   = gainDs;
     _chartTrend.update('active');
     _updateTrendSrTable(yearly);
     return;
@@ -575,18 +670,6 @@ function _buildTrendChart() {
       labels,
       datasets: [
         {
-          label:            'Forest Cover',
-          data:             coverDs,
-          borderColor:      COLOR.green,
-          backgroundColor:  COLOR.greenArea,
-          fill:             false,
-          tension:          0.35,
-          pointRadius:      4,
-          pointHoverRadius: 7,
-          borderWidth:      2.5,
-          yAxisID:          'yCover',
-        },
-        {
           label:            'Forest Loss',
           data:             lossDs,
           borderColor:      COLOR.loss,
@@ -596,7 +679,7 @@ function _buildTrendChart() {
           pointRadius:      3,
           pointHoverRadius: 6,
           borderWidth:      2,
-          yAxisID:          'yLossGain',
+          yAxisID:          'yLoss',
         },
         {
           label:            'Forest Gain',
@@ -608,7 +691,7 @@ function _buildTrendChart() {
           pointRadius:      3,
           pointHoverRadius: 6,
           borderWidth:      2,
-          yAxisID:          'yLossGain',
+          yAxisID:          'yGain',
         },
       ],
     },
@@ -626,12 +709,12 @@ function _buildTrendChart() {
       },
       scales: {
         x: _xAxis(),
-        yCover: {
-          ..._yAxis('Forest Cover (ha)'),
+        yLoss: {
+          ..._yAxis('Forest Loss (ha)'),
           position: 'left',
         },
-        yLossGain: {
-          ..._yAxis('Loss / Gain (ha)'),
+        yGain: {
+          ..._yAxis('Forest Gain (ha)'),
           position: 'right',
           grid: { drawOnChartArea: false },
         },
@@ -654,7 +737,6 @@ function _buildTrendLegend() {
   container.innerHTML = '';
 
   const datasets = [
-    { label: 'Forest Cover', color: COLOR.green },
     { label: 'Forest Loss',  color: COLOR.loss  },
     { label: 'Forest Gain',  color: COLOR.gain  },
   ];
@@ -900,7 +982,7 @@ function _buildProvinceChart(metricKey) {
   const wrap = document.getElementById('province-radial-wrap');
   if (!wrap) return;
 
-  const provinces = getProvinces();
+  const provinces = getFilteredProvinces();
 
   // Sort descending by absolute value of the active metric so the
   // largest value always gets the outermost ring.
@@ -942,10 +1024,17 @@ function _buildProvinceChart(metricKey) {
   const cx = SVG_SIZE / 2;
   const cy = SVG_SIZE / 2;
 
-  // Ring geometry: outermost ring first
-  const TRACK_W    = Math.max(SVG_SIZE * 0.048, 10);  // stroke width
-  const RING_GAP   = Math.max(SVG_SIZE * 0.022, 5);   // gap between rings
-  const OUTER_R    = (SVG_SIZE / 2) - TRACK_W / 2 - 4;
+  // Ring geometry: outermost ring first.
+  // Dynamically scale TRACK_W and RING_GAP so all N rings always fit inside
+  // the SVG, regardless of how many provinces there are.
+  const INNER_MARGIN = 12;                              // minimum center clearance
+  const usableR      = SVG_SIZE / 2 - INNER_MARGIN;    // total radial space available
+  // Each ring consumes (TRACK_W + RING_GAP); solve for the step that fits N rings
+  // while keeping the gap-to-stroke ratio ≈ 0.46 (same feel as before).
+  const RING_STEP  = usableR / (N + 0.5);              // +0.5 leaves a tidy outer margin
+  const TRACK_W    = Math.max(RING_STEP * 0.68, 6);    // ~68% stroke, ~32% gap
+  const RING_GAP   = Math.max(RING_STEP - TRACK_W, 3);
+  const OUTER_R    = usableR - TRACK_W / 2;            // outermost ring centre-line
 
   // ── Helper: polar → cartesian ───────────────────────────────
   function polarToCart(cx, cy, r, angleDeg) {
@@ -1058,7 +1147,10 @@ function _buildProvinceChart(metricKey) {
 
   // ── Center label ─────────────────────────────────────────────
   const centerLabel = metricLabel;
-  const centerSub   = `${N} Provinces`;
+  const _yearLabel  = _filter.yearStart === _filter.yearEnd
+    ? String(_filter.yearStart)
+    : `${_filter.yearStart}–${_filter.yearEnd}`;
+  const centerSub   = N === 1 ? sorted[0]?.name ?? '1 Province' : `${N} Provinces · ${_yearLabel}`;
 
   // ── Assemble final HTML ──────────────────────────────────────
   wrap.innerHTML = `
@@ -1622,7 +1714,7 @@ function _resetFilters() {
   _filter.district  = 'all';
 
   _populateDistrictSelect();
-  _refreshAll();
+  _refreshAllWithProvince();
 }
 
 /**
@@ -1633,11 +1725,20 @@ function _refreshAll() {
   _buildTrendChart();
   _buildLossChart();
   _buildGainLossChart();
-  _buildProvinceChart(_provinceMetric);
   _renderDistrictRanking(_districtMetric);
   _buildCompositionChart();
   _renderFindings();
   _renderTable();
+}
+
+/**
+ * Refresh everything AND rebuild the province chart.
+ * Called only from year-change paths so the province chart
+ * is unaffected by province/district filter changes.
+ */
+function _refreshAllWithProvince() {
+  _refreshAll();
+  _buildProvinceChart(_provinceMetric);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1697,7 +1798,7 @@ function _onYearChanged({ year }) {
       _filter.yearStart = year;
     }
 
-    _applyFilters();
+    _refreshAllWithProvince();
   }
 }
 
@@ -1729,8 +1830,8 @@ export function init(stats) {
   const districtEl = document.getElementById('adash-district');
   const resetBtn   = document.getElementById('adash-reset');
 
-  if (startEl)    startEl.addEventListener('change', _applyFilters);
-  if (endEl)      endEl.addEventListener('change', _applyFilters);
+  if (startEl)    startEl.addEventListener('change', () => { _applyFilters(); _buildProvinceChart(_provinceMetric); });
+  if (endEl)      endEl.addEventListener('change',   () => { _applyFilters(); _buildProvinceChart(_provinceMetric); });
   if (provinceEl) {
     provinceEl.addEventListener('change', () => {
       _filter.province = provinceEl.value;
@@ -1753,7 +1854,7 @@ export function init(stats) {
   EventBus.on('year:changed', _onYearChanged);
 
   // 6. Initial full render
-  _refreshAll();
+  _refreshAllWithProvince();
 
   // 7. Re-render radial chart on container resize (responsive)
   const radialWrap = document.getElementById('province-radial-wrap');
