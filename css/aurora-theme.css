@@ -696,15 +696,15 @@ main > section:not(#hero):not(#statistics)::before {
 }
 
 /* ============================================================
-   15. NAVBAR — crisp white glass on scroll
+   15. NAVBAR — frosted glass on scroll
    ============================================================ */
 
 #navbar.navbar--scrolled {
-  background: rgba(10, 30, 15, 0.35);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  background: rgba(15, 30, 20, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.18);
 }
 #navbar.navbar--scrolled .nav-logo a   { color: rgba(255, 255, 255, 0.95); }
 #navbar.navbar--scrolled .nav-logo a span { color: rgba(255, 255, 255, 0.95); }
