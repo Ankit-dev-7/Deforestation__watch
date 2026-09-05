@@ -589,8 +589,11 @@ main > section:not(#hero):not(#statistics)::before {
   border-color: #f1f5f9;
   border-radius: 10px;
 }
-#top-risk-list li:hover { background: #f1f5f9; }
+#top-risk-list li:hover,
+#top-risk-list .risk-list-item:hover { background: #f1f5f9; }
 .risk-bar-container     { background: #e2e8f0; border-radius: 999px; }
+.risk-method-pill       { background: rgba(240,253,244,0.9); color: #15803d; border-color: rgba(22,163,74,0.25); }
+.risk-source-note       { color: #475569; border-top-color: #e2e8f0; }
 
 #prediction .chart-wrapper {
   border-radius: 16px;

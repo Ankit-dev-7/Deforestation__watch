@@ -25,7 +25,7 @@ function riskBadgeClass(score) {
 /**
  * Render the Top-10 High Risk Districts ordered list.
  * Source: risk.districts sorted descending by riskScore.
- * @param {Array<{name:string, riskScore:number}>} riskDistricts
+ * @param {Array<{name:string, riskScore:number, treeCoverLossHa?:number}>} riskDistricts
  */
 function renderTop10List(riskDistricts) {
   const list = document.getElementById('top-risk-list');
@@ -38,14 +38,14 @@ function renderTop10List(riskDistricts) {
 
   top10.forEach((d, idx) => {
     const li = document.createElement('li');
-    li.style.cssText = 'margin-bottom: 12px !important;';
+    li.className = 'risk-list-item';
 
     const rank = document.createElement('span');
-    rank.style.cssText = 'font-weight:700;min-width:1.5rem;color:var(--color-neutral-500);';
+    rank.className = 'risk-rank';
     rank.textContent = `${idx + 1}.`;
 
     const distName = document.createElement('span');
-    distName.style.cssText = 'flex:1;font-weight:500;';
+    distName.className = 'risk-name';
     distName.textContent = d.name;
 
     const barContainer = document.createElement('div');
