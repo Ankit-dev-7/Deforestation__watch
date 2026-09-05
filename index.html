@@ -6,8 +6,8 @@
   <title>Deforestation Watch Nepal</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="Photos/Logo%202.png">
-  <link rel="apple-touch-icon" href="Photos/Logo%202.png">
+  <link rel="icon" type="image/png" href="Photos/Logo%203.png">
+  <link rel="apple-touch-icon" href="Photos/Logo%203.png">
 
   <!-- CDN: Leaflet CSS 1.9.4 -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -26,6 +26,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <!-- Aurora Environmental Glow Theme — loaded last to override flat backgrounds -->
+  <link rel="stylesheet" href="css/aurora-theme.css">
 </head>
 <body>
 
@@ -35,7 +37,7 @@
       <!-- Logo -->
       <div class="nav-logo">
         <a href="#hero" aria-label="Deforestation Watch Nepal — go to top">
-          <img src="Photos/Logo%202.png"
+          <img src="Photos/Logo%203.png"
                alt="Deforestation Watch Nepal logo"
                class="nav-logo-img"
                width="48"
@@ -48,8 +50,8 @@
       <ul id="nav-links" role="list" aria-label="Site sections">
         <li><a href="#hero"          class="nav-link">Home</a></li>
         <li><a href="#statistics"    class="nav-link">Statistics</a></li>
-        <li><a href="#map"           class="nav-link">Map</a></li>
         <li><a href="#analytics"     class="nav-link">Analytics</a></li>
+        <li><a href="#map"           class="nav-link">Map</a></li>
         <li><a href="#prediction"    class="nav-link">Prediction</a></li>
         <li><a href="#insights"      class="nav-link">Insights</a></li>
         <li><a href="#team"          class="nav-link">Team</a></li>
@@ -70,14 +72,22 @@
 
     <!-- Hero Section -->
     <section id="hero" aria-labelledby="hero-heading">
-      <!-- Layer 0: satellite background image + dark overlay -->
+
+      <!-- Layer 0: cinematic forest photograph + atmospheric overlays -->
       <div class="hero-bg" aria-hidden="true">
-        <img src="assets/images/hero-bg.jpg"
+        <!-- Actual forest photograph — the visual foundation -->
+        <img src="Photos/background%206.jpeg"
              alt=""
              aria-hidden="true"
-             loading="lazy"
-             class="hero-bg-img">
+             class="hero-bg-photo"
+             loading="eager"
+             decoding="async">
+        <!-- Cinematic colour-grade: very light so photo stays visible -->
         <div class="hero-bg-overlay"></div>
+        <!-- Left curtain: dark band behind text for readability -->
+        <div class="hero-bg-left-veil"></div>
+        <!-- Bottom fade → blends into next section -->
+        <div class="hero-bg-bottom-fade"></div>
       </div>
 
       <!-- Layer 1: particle canvas (above bg, below text) -->
@@ -86,7 +96,7 @@
       <!-- Layer 2: hero content -->
       <div class="hero-content">
 
-        <!-- Left: text, stats, scroll indicator -->
+        <!-- Left: text, stats -->
         <div class="hero-text">
           <div class="hero-badge">
             <i class="fa-solid fa-leaf" aria-hidden="true"></i>
@@ -98,8 +108,7 @@
             deforestation risk, data from 2015 to 2025.
           </p>
 
-          <!-- Hero stat placeholder cards (Forest Cover, Forest Loss, Forest Gain).
-               ui.init() replaces these with live data from statistics.json. -->
+          <!-- Hero stat placeholder cards — populated by ui.init() from statistics.json -->
           <div id="hero-stats" aria-label="Key forest statistics">
             <div class="hero-stat-card" data-hero-stat="forestCoverHa" aria-label="Total Forest Cover">
               <i class="fa-solid fa-tree" aria-hidden="true"></i>
@@ -120,40 +129,26 @@
 
         </div>
 
-        <!-- Right: floating logo -->
-        <div class="hero-logo-wrap" aria-hidden="true">
-          <img src="Photos/Logo%202.png"
-               alt="Deforestation Watch Nepal logo"
-               class="hero-logo-img"
-               width="240"
-               height="240"
-               loading="eager">
-        </div>
+
 
       </div>
 
-      <!-- Scroll indicator: centered below the full hero row -->
-      <button class="scroll-indicator"
-              aria-label="Scroll to statistics"
-              onclick="document.getElementById('statistics').scrollIntoView({behavior:'smooth'})">
-        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-      </button>
-
     </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CONTINUOUS BACKGROUND WRAPPER — background 1.jpeg
+         One shared misty-mountain photograph across every section
+         below the hero. The dark forest-green overlay keeps all
+         charts, cards, and text fully readable.
+    ═══════════════════════════════════════════════════════════ -->
+    <div id="content-bg-wrap">
 
     <!-- Statistics Cards Section -->
     <section id="statistics" aria-labelledby="stats-heading">
+      <span class="section-accent-bar" aria-hidden="true"></span>
       <h2 id="stats-heading">Forest Statistics</h2>
       <p>Nationwide forest metrics for Nepal, updated annually from satellite imagery analysis.</p>
       <div id="stats-cards-grid" aria-label="Forest statistics cards"></div>
-    </section>
-
-    <!-- GIS Map Section -->
-    <section id="map" aria-labelledby="map-heading">
-      <h2 id="map-heading">Interactive Forest Map</h2>
-      <div id="map-container"
-           aria-label="Interactive Leaflet map of Nepal forest cover"
-           style="min-height: 600px;"></div>
     </section>
 
     <!-- Analytics Dashboard Section -->
@@ -466,9 +461,7 @@
                   <th scope="col" class="adash-th adash-th--sortable" data-col="netChange" aria-sort="none">
                     Net Change <span class="adash-sort-icon" aria-hidden="true"></span>
                   </th>
-                  <th scope="col" class="adash-th" data-col="changePct">
-                    Change %
-                  </th>
+
                 </tr>
               </thead>
               <tbody id="adash-table-tbody"></tbody>
@@ -481,6 +474,14 @@
       <!-- charts.js still initialises these but they are replaced by new analytics.js -->
       <canvas id="chart-district" aria-hidden="true" style="display:none" width="0" height="0"></canvas>
 
+    </section>
+
+    <!-- GIS Map Section -->
+    <section id="map" aria-labelledby="map-heading">
+      <h2 id="map-heading">Interactive Forest Map</h2>
+      <div id="map-container"
+           aria-label="Interactive Leaflet map of Nepal forest cover"
+           style="min-height: 600px;"></div>
     </section>
 
     <!-- Prediction Dashboard Section -->
@@ -519,22 +520,7 @@
         <ol id="top-risk-list" aria-label="Ranked list of highest risk districts"></ol>
       </div>
 
-      <!-- Historical vs predicted chart -->
-      <article class="chart-wrapper" aria-labelledby="chart-historical-label">
-        <h3 id="chart-historical-label">Historical vs. Predicted Forest Cover</h3>
-        <canvas id="chart-historical-predicted"
-                aria-label="Historical vs Predicted Forest Cover"></canvas>
-        <p class="chart-model-note">
-          <span class="chart-model-note__icon" aria-hidden="true">
-            <i class="fa-solid fa-circle-info"></i>
-          </span>
-          <span class="chart-model-note__text">
-            <strong>Actual line:</strong> real GFW/DFRS data (2015–2025).&ensp;
-            <strong>Predicted line:</strong> model-estimated projection (2026–2030)
-            based on historical loss trends — <em>not an official forecast</em>.
-          </span>
-        </p>
-      </article>
+
 
     </section>
 
@@ -558,7 +544,7 @@
           <div class="team-card-info">
             <h3 class="team-member-name">Ashish Pandey</h3>
             <p class="team-member-role">Mentor</p>
-            <p class="team-member-bio">AI Research Intern at CAIR-Nepal</p>
+            <p class="team-member-bio"> </p>
             <div class="team-member-links">
               <a href="https://github.com/Ashish-Pandey62"
                  target="_blank"
@@ -585,7 +571,7 @@
           <div class="team-card-info">
             <h3 class="team-member-name">Binod Pandey</h3>
             <p class="team-member-role">Co-Mentor</p>
-            <p class="team-member-bio">Student at Tribhuvan University, IOE, Pulchowk Campus</p>
+            <p class="team-member-bio">  </p>
             <div class="team-member-links">
               <a href="https://github.com/binod-pandey"
                  target="_blank"
@@ -665,7 +651,7 @@
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ESB%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
             <h3 class="team-member-name">Bipul Pandey</h3>
-            <p class="team-member-role">data </p>
+            <p class="team-member-role">data analyst </p>
             <p class="team-member-bio">A member of Project</p>
             <div class="team-member-links">
               <a href="https://github.com/bipul7746"
@@ -850,6 +836,8 @@
       </div>
     </section>
 
+    </div><!-- /#content-bg-wrap -->
+
   </main>
 
   <!-- Footer -->
@@ -894,7 +882,7 @@
     <div class="footer-content">
       <div class="footer-brand">
         <span>
-          <img src="Photos/Logo%202.png"
+          <img src="Photos/Logo%203.png"
                alt="Deforestation Watch Nepal logo"
                class="footer-logo-img"
                width="36"
