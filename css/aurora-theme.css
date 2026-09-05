@@ -775,6 +775,7 @@ main > section:not(#hero):not(#statistics)::before {
 /* ============================================================
    20. WIDESCREEN — expand content to 92vw up to 1400px
    ============================================================ */
+
 @media (min-width: 1400px) {
   #statistics > *,
   #map > *,

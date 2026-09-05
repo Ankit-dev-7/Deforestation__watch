@@ -370,7 +370,6 @@
           <div class="adash-chart-card__header">
             <div>
               <h3 class="adash-chart-title">Top 10 High Risk Districts</h3>
-              <p class="adash-chart-subtitle" id="adash-district-subtitle">Ranked by forest loss (ha)</p>
             </div>
             <div class="adash-metric-switch" role="group" aria-label="Select ranking metric for districts">
               <button class="adash-district-btn adash-metric-btn--active" data-dmetric="forestLossHa" aria-pressed="true">Loss</button>
@@ -479,16 +478,12 @@
     <!-- Prediction Dashboard Section -->
     <section id="prediction" aria-labelledby="prediction-heading">
       <h2 id="prediction-heading">Top 10 High Risk Districts</h2>
-      <p>Composite deforestation risk ranking based on DFRS 2015 district data and GFW satellite trends 2015–2024.</p>
-
-
 
       <!-- Top 10 high risk list -->
       <div id="top-risk-list-wrapper" aria-labelledby="top-risk-heading">
 
-        <!-- Header row: title + methodology pill -->
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.5rem;">
-          <h3 id="top-risk-heading" style="margin:0;">Top 10 High Risk Districts</h3>
+        <!-- Header row: methodology pill -->
+        <div style="display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
           <span class="risk-method-pill" title="Composite deforestation risk index (0-100) derived from DFRS 2015 district deforestation rates, agricultural encroachment pressure, and Churia range degradation severity. Normalized so highest-risk district = 100. Source: DFRS 2015 / World Bank 2025 / FAO 2020.">
             <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
             Composite Risk Index (0–100) · DFRS 2015 + FAO
@@ -570,17 +565,7 @@
         </ol>
 
         <!-- Source disclaimer -->
-        <p class="risk-source-note">
-          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-          <strong>Index, not a raw measurement.</strong>
-          Scores are a composite of district-level deforestation rates (DFRS 2015), agricultural encroachment pressure (World Bank 2025), and Churia range degradation (FAO 2020), normalized 0–100.
-          District-level hectare figures are not included because no authoritative disaggregated dataset is publicly available —
-          Nepal's national tree cover loss totals ~58,320 ha (2001–2024) per
-          <a href="https://www.globalforestwatch.org/" target="_blank" rel="noopener noreferrer">Global Forest Watch</a>.
-          Sources: <a href="https://www.dfrs.gov.np/" target="_blank" rel="noopener noreferrer">DFRS 2015</a> ·
-          <a href="https://www.worldbank.org/en/country/nepal/publication/may-the-forest-be-with-you-mapping-nepal-s-forest-landscapes-and-livelihoods" target="_blank" rel="noopener noreferrer">World Bank 2025</a> ·
-          <a href="https://www.fao.org/3/az286e/az286e.pdf" target="_blank" rel="noopener noreferrer">FAO FRA 2020</a>.
-        </p>
+
 
       </div>
 

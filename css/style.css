@@ -145,7 +145,7 @@ body::before {
 }
 
 section {
-  padding: 5rem 2rem;
+  padding: 5rem clamp(2rem, calc((100% - 1400px) / 2 + 2rem), 50%);
   max-width: 100%;
   margin: 0;
   box-sizing: border-box;
