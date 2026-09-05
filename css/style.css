@@ -224,11 +224,11 @@ main > section:not(#hero):not(#statistics)::before {
 }
 
 #navbar.navbar--scrolled {
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 1px 0 var(--color-border), var(--shadow-sm);
-  border-bottom: 1px solid rgba(22, 163, 74, 0.12);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Logo — white on hero, dark when scrolled */
@@ -250,11 +250,11 @@ main > section:not(#hero):not(#statistics)::before {
 }
 
 #navbar.navbar--scrolled .nav-logo a {
-  color: var(--color-text-primary);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 #navbar.navbar--scrolled .nav-logo a i {
-  color: var(--color-primary);
+  color: #4ade80;
 }
 
 #nav-links {
@@ -285,17 +285,17 @@ main > section:not(#hero):not(#statistics)::before {
 
 /* Scrolled state nav links */
 #navbar.navbar--scrolled .nav-link {
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 #navbar.navbar--scrolled .nav-link:hover {
-  color: var(--color-primary-dark);
-  background: var(--sage-100);
+  color: #4ade80;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 #navbar.navbar--scrolled .nav-link--active {
-  color: var(--color-primary-dark);
-  background: var(--color-primary-pale);
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
 }
 
 #hamburger-btn {
@@ -313,7 +313,7 @@ main > section:not(#hero):not(#statistics)::before {
 }
 
 #navbar.navbar--scrolled #hamburger-btn {
-  color: var(--color-text-primary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ============================================================
@@ -3311,10 +3311,10 @@ main section:nth-of-type(even) {
   filter: drop-shadow(0 2px 6px rgba(22, 163, 74, 0.45));
 }
 
-/* When navbar is scrolled (light background), revert blend mode */
+/* Glass navbar — keep screen blend so logo stays crisp on dark transparent bg */
 #navbar.navbar--scrolled .nav-logo-img {
-  mix-blend-mode: normal;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
 }
 
 /* ── Hero section: column wrapper so scroll indicator sits below content ── */

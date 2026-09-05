@@ -1047,24 +1047,24 @@ html, body {
    29. NAVBAR — scrolled state with forest tone
    ============================================================ */
 #navbar.navbar--scrolled {
-  background: rgba(247, 252, 247, 0.97);
-  border-bottom: 1px solid rgba(22, 101, 52, 0.10);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 1px 14px rgba(15, 40, 20, 0.08);
+  background: rgba(5, 25, 10, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 }
 
-#navbar.navbar--scrolled .nav-link     { color: #3d5c46; }
+#navbar.navbar--scrolled .nav-link     { color: rgba(255, 255, 255, 0.85); }
 #navbar.navbar--scrolled .nav-link:hover {
-  color: #16a34a;
-  background: #f0fdf4;
+  color: #4ade80;
+  background: rgba(255, 255, 255, 0.08);
 }
 #navbar.navbar--scrolled .nav-link--active {
-  color: #16a34a;
-  background: #dcfce7;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
 }
-#navbar.navbar--scrolled .nav-logo a   { color: #0c1f0f; }
-#navbar.navbar--scrolled .nav-logo a i { color: #16a34a; }
+#navbar.navbar--scrolled .nav-logo a   { color: rgba(255, 255, 255, 0.95); }
+#navbar.navbar--scrolled .nav-logo a i { color: #4ade80; }
 
 /* ============================================================
    30. FOOTER — Deep forest dark with green accents
