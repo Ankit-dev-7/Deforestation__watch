@@ -147,7 +147,6 @@
     <section id="statistics" aria-labelledby="stats-heading">
       <span class="section-accent-bar" aria-hidden="true"></span>
       <h2 id="stats-heading">Forest Statistics</h2>
-      <p>Nationwide forest metrics for Nepal, updated annually from satellite imagery analysis.</p>
       <div id="stats-cards-grid" aria-label="Forest statistics cards"></div>
     </section>
 
@@ -369,7 +368,8 @@
         <div class="adash-chart-card" id="adash-district-card">
           <div class="adash-chart-card__header">
             <div>
-              <h3 class="adash-chart-title">Top 10 High Risk Districts</h3>
+              <h3 class="adash-chart-title">Top 10 Districts by Forest Loss</h3>
+              <p class="adash-chart-subtitle" id="adash-district-subtitle">Ranked by forest loss (ha)</p>
             </div>
             <div class="adash-metric-switch" role="group" aria-label="Select ranking metric for districts">
               <button class="adash-district-btn adash-metric-btn--active" data-dmetric="forestLossHa" aria-pressed="true">Loss</button>
@@ -479,94 +479,11 @@
     <section id="prediction" aria-labelledby="prediction-heading">
       <h2 id="prediction-heading">Top 10 High Risk Districts</h2>
 
+
+
       <!-- Top 10 high risk list -->
       <div id="top-risk-list-wrapper" aria-labelledby="top-risk-heading">
-
-        <!-- Header row: methodology pill -->
-        <div style="display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
-          <span class="risk-method-pill" title="Composite deforestation risk index (0-100) derived from DFRS 2015 district deforestation rates, agricultural encroachment pressure, and Churia range degradation severity. Normalized so highest-risk district = 100. Source: DFRS 2015 / World Bank 2025 / FAO 2020.">
-            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-            Composite Risk Index (0–100) · DFRS 2015 + FAO
-          </span>
-        </div>
-
-        <ol id="top-risk-list" aria-label="Ranked list of highest risk districts">
-          <!-- Static seed — JS (prediction.js) replaces this at runtime with animated bars -->
-          <li class="risk-list-item">
-            <span class="risk-rank">1.</span>
-            <span class="risk-name">Siraha</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:95%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">95</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">2.</span>
-            <span class="risk-name">Rautahat</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:91%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">91</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">3.</span>
-            <span class="risk-name">Rupandehi</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:87%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">87</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">4.</span>
-            <span class="risk-name">Bara</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:85%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">85</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">5.</span>
-            <span class="risk-name">Kapilvastu</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:83%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">83</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">6.</span>
-            <span class="risk-name">Jhapa</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:81%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">81</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">7.</span>
-            <span class="risk-name">Morang</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:78%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">78</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">8.</span>
-            <span class="risk-name">Sunsari</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:76%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">76</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">9.</span>
-            <span class="risk-name">Saptari</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:74%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">74</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-          <li class="risk-list-item">
-            <span class="risk-rank">10.</span>
-            <span class="risk-name">Mahottari</span>
-            <div class="risk-bar-container"><div class="risk-bar" style="width:70%;background:#dc2626;"></div></div>
-            <span class="risk-score-label">70</span>
-            <span class="badge badge-red">Critical</span>
-          </li>
-        </ol>
-
-        <!-- Source disclaimer -->
-
-
+        <ol id="top-risk-list" aria-label="Ranked list of highest risk districts"></ol>
       </div>
 
 
@@ -586,7 +503,6 @@
            aria-label="Interactive Leaflet map of Nepal forest cover"
            style="min-height: 600px;"></div>
     </section>
-
     <!-- Team Section -->
     <section id="team" aria-labelledby="team-heading">
       <h2 id="team-heading">Our Team</h2>
@@ -681,7 +597,7 @@
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3EPA%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
             <h3 class="team-member-name">Ankit Gaire</h3>
-            <p class="team-member-role">Data analyst</p>
+            <p class="team-member-role">Frontend Developer</p>
             <p class="team-member-bio">A member of Project</p>
             <div class="team-member-links">
               <a href="https://github.com/Ankit-dev-7"
