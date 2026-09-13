@@ -51,7 +51,6 @@
         <li><a href="#hero"          class="nav-link">Home</a></li>
         <li><a href="#statistics"    class="nav-link">Statistics</a></li>
         <li><a href="#analytics"     class="nav-link">Analytics</a></li>
-        <li><a href="#prediction"    class="nav-link">Prediction</a></li>
         <li><a href="#insights"      class="nav-link">Insights</a></li>
         <li><a href="#map"           class="nav-link">Map</a></li>
         <li><a href="#team"          class="nav-link">Team</a></li>
@@ -104,8 +103,7 @@
           </div>
           <h1 id="hero-heading" class="hero-title">Deforestation Watch Nepal</h1>
           <p class="hero-subtitle">
-            Real-time GIS intelligence platform monitoring Nepal's forest cover dynamics,
-            deforestation risk, data from 2015 to 2025.
+          GIS-based environmental intelligence platform monitoring Nepal's forest cover, forest loss, and deforestation risk from 2015–2025.
           </p>
 
           <!-- Hero stat placeholder cards — populated by ui.init() from statistics.json -->
@@ -116,12 +114,12 @@
               <span class="hero-stat-label">Forest Cover</span>
             </div>
             <div class="hero-stat-card" data-hero-stat="forestLossHa" aria-label="Annual Forest Loss">
-              <i class="fa-solid fa-circle-minus" aria-hidden="true"></i>
+              <i class="fa-solid fa-fire" aria-hidden="true"></i>
               <span class="hero-stat-value">—</span>
               <span class="hero-stat-label">Forest Loss</span>
             </div>
             <div class="hero-stat-card" data-hero-stat="forestGainHa" aria-label="Annual Forest Gain">
-              <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+              <i class="fa-solid fa-seedling" aria-hidden="true"></i>
               <span class="hero-stat-value">—</span>
               <span class="hero-stat-label">Forest Gain</span>
             </div>
@@ -152,6 +150,7 @@
 
     <!-- Analytics Dashboard Section -->
     <section id="analytics" aria-labelledby="analytics-heading">
+      <span class="section-accent-bar" aria-hidden="true"></span>
 
       <!-- Hidden year-timeline: dashboard.js renders year buttons here and emits
            year:changed events. The element is kept off-screen so the EventBus
@@ -222,7 +221,7 @@
 
         <div class="adash-kpi-card" role="listitem" aria-label="Forest Loss">
           <div class="adash-kpi-card__icon adash-kpi-card__icon--loss">
-            <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
+            <i class="fa-solid fa-fire" aria-hidden="true"></i>
           </div>
           <div class="adash-kpi-card__body">
             <span class="adash-kpi-card__label">Forest Loss</span>
@@ -234,7 +233,7 @@
 
         <div class="adash-kpi-card" role="listitem" aria-label="Forest Gain">
           <div class="adash-kpi-card__icon adash-kpi-card__icon--gain">
-            <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i>
+            <i class="fa-solid fa-seedling" aria-hidden="true"></i>
           </div>
           <div class="adash-kpi-card__body">
             <span class="adash-kpi-card__label">Forest Gain</span>
@@ -475,29 +474,18 @@
 
     </section>
 
-    <!-- Prediction Dashboard Section -->
-    <section id="prediction" aria-labelledby="prediction-heading">
-      <h2 id="prediction-heading">Top 10 High Risk Districts</h2>
 
-
-
-      <!-- Top 10 high risk list -->
-      <div id="top-risk-list-wrapper" aria-labelledby="top-risk-heading">
-        <ol id="top-risk-list" aria-label="Ranked list of highest risk districts"></ol>
-      </div>
-
-
-
-    </section>
 
     <!-- Environmental Insights Section -->
     <section id="insights" aria-labelledby="insights-heading">
+      <span class="section-accent-bar" aria-hidden="true"></span>
       <h2 id="insights-heading">Environmental Insights</h2>
       <div id="insights-grid" aria-label="Auto-generated environmental insight cards"></div>
     </section>
 
     <!-- GIS Map Section -->
     <section id="map" aria-labelledby="map-heading">
+      <span class="section-accent-bar" aria-hidden="true"></span>
       <h2 id="map-heading">Interactive Forest Map</h2>
       <div id="map-container"
            aria-label="Interactive Leaflet map of Nepal forest cover"
@@ -505,6 +493,7 @@
     </section>
     <!-- Team Section -->
     <section id="team" aria-labelledby="team-heading">
+      <span class="section-accent-bar" aria-hidden="true"></span>
       <h2 id="team-heading">Our Team</h2>
       <div id="team-grid" aria-label="Team member profile cards">
 
@@ -570,8 +559,8 @@
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ERT%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
             <h3 class="team-member-name">Abhiruchi Gautam</h3>
-            <p class="team-member-role">Data analyst</p>
-            <p class="team-member-bio">A member of Project</p>
+            <p class="team-member-role">Documentation Specialist</p>
+            <p class="team-member-bio"></p>
             <div class="team-member-links">
               <a href="https://github.com/AbhiruchiGautam"
                  target="_blank"
@@ -598,7 +587,7 @@
           <div class="team-card-info">
             <h3 class="team-member-name">Ankit Gaire</h3>
             <p class="team-member-role">Frontend Developer</p>
-            <p class="team-member-bio">A member of Project</p>
+            <p class="team-member-bio"></p>
             <div class="team-member-links">
               <a href="https://github.com/Ankit-dev-7"
                  target="_blank"
@@ -624,8 +613,8 @@
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ESB%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
             <h3 class="team-member-name">Bipul Pandey</h3>
-            <p class="team-member-role">data analyst </p>
-            <p class="team-member-bio">A member of Project</p>
+            <p class="team-member-role">Data Visualizer</p>
+            <p class="team-member-bio"></p>
             <div class="team-member-links">
               <a href="https://github.com/bipul7746"
                  target="_blank"
@@ -651,8 +640,8 @@
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ESK%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
             <h3 class="team-member-name">Dipti Ojha</h3>
-            <p class="team-member-role">Data Analyst</p>
-            <p class="team-member-bio">A member of Project</p>
+            <p class="team-member-role">Presentation Specialist</p>
+            <p class="team-member-bio"></p>
             <div class="team-member-links">
               <a href="https://github.com/diptiojha793"
                  target="_blank"
@@ -678,8 +667,8 @@
                onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'60\' fill=\'%23374151\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'42\'%3ERJ%3C/text%3E%3C/svg%3E'">
           <div class="team-card-info">
             <h3 class="team-member-name">Suyog Adhikari</h3>
-            <p class="team-member-role">Data Analyst</p>
-            <p class="team-member-bio">A member of Project</p>
+            <p class="team-member-role"> GIS Analyst</p>
+            <p class="team-member-bio"></p>
             <div class="team-member-links">
               <a href="https://github.com/suyogadhikarii07"
                  target="_blank"
@@ -706,7 +695,7 @@
           <div class="team-card-info">
             <h3 class="team-member-name">Shishir Pandey</h3>
             <p class="team-member-role">Data Analyst</p>
-            <p class="team-member-bio">A member of Project</p>
+            <p class="team-member-bio"></p>
             <div class="team-member-links">
               <a href="https://github.com/shishirpandey2007?tab=overview&from=2026-08-01&to=2026-08-14"
                  target="_blank"
@@ -729,6 +718,7 @@
 
     <!-- Contact Section -->
     <section id="contact" aria-labelledby="contact-heading">
+      <span class="section-accent-bar" aria-hidden="true"></span>
       <h2 id="contact-heading">Contact Us</h2>
 
       <div class="contact-layout">
